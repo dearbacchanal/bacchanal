@@ -9,7 +9,6 @@ import TestimonialsMarquee from "./TestimonialsMarquee";
 import WhyBacchanal from "./WhyBacchanal";
 import QuoteSection from "./QuoteSection";
 import CTASection from "./CTASection";
-import Navbar from "@/components/layout/Navbar";
 import Premium from "./Premium";
 
 const Index = () => {
@@ -18,7 +17,6 @@ const Index = () => {
 
   return (
     <>
-      <Navbar />
       <HeroSection />
       <BookShowcase />
       <FeaturesGrid />
