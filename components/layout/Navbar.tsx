@@ -4,11 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useAuthModal } from "@/hooks/useAuthModal";
+import { UserAvatar } from "@/components/auth/UserAvatar";
+import { AuthModal } from "@/components/auth/AuthModal";
 
 const Navbar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { openModal } = useAuthModal();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -65,12 +71,16 @@ const Navbar = () => {
                 )}
               </Link>
             ))}
-            <Link
-              href="/customize"
-              className="bg-red-500 rounded-xl text-base px-6 py-2.5"
-            >
-              <span>Get Started</span>
-            </Link>
+            {isAuthenticated ? (
+              <UserAvatar />
+            ) : (
+              <button
+                onClick={() => openModal("signin")}
+                className="bg-red-500 rounded-xl text-base px-6 py-2.5 hover:bg-red-600 transition-colors duration-200"
+              >
+                <span>Get Started</span>
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -101,17 +111,24 @@ const Navbar = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/customize"
-                onClick={() => setIsOpen(false)}
-                className="btn-modern text-base px-6 py-3 text-center mt-2"
-              >
-                <span>Get Started</span>
-              </Link>
+              {isAuthenticated ? (
+                <UserAvatar />
+              ) : (
+                <button
+                  onClick={() => {
+                    openModal("signin");
+                    setIsOpen(false);
+                  }}
+                  className="bg-red-500 rounded-xl text-base px-6 py-3 text-center mt-2 hover:bg-red-600 transition-colors duration-200"
+                >
+                  <span>Get Started</span>
+                </button>
+              )}
             </div>
           </div>
         )}
       </div>
+      <AuthModal />
     </nav>
   );
 };
