@@ -2,8 +2,9 @@
 
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Save } from "lucide-react";
 import Link from "next/link";
+import { SaveBookModal } from "./SaveBookModal";
 
 interface BookFlipProps {
   pages: React.ReactNode[];
@@ -13,6 +14,7 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
   const pagesRef = useRef<(HTMLDivElement | null)[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
 
   const flipNext = () => {
     if (currentPage >= pages.length - 1 || isAnimating) return;
@@ -157,25 +159,45 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
           </span>
         </Link>
 
-        {/* Right Arrow Button */}
-        <button
-          onClick={flipNext}
-          disabled={currentPage === pages.length - 1 || isAnimating}
-          className={`
-            p-2 sm:p-3 md:p-3.5 lg:p-4 rounded-full
-            bg-white/10 backdrop-blur-xl border border-white/20
-            transition-all duration-300
-            ${
-              currentPage === pages.length - 1 || isAnimating
-                ? "opacity-30 cursor-not-allowed"
-                : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
-            }
-          `}
-          aria-label="Next page"
-        >
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white" />
-        </button>
+        {/* Right Button - Next Arrow or Save Button */}
+        {currentPage === 14 ? (
+          // Save Button on fifteenth page
+          <button
+            onClick={() => setIsSaveModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-coral via-teal to-yellow text-white font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg active:scale-95"
+            aria-label="Save book"
+          >
+            <Save className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span className="text-sm sm:text-base">Save Book</span>
+          </button>
+        ) : (
+          // Next Arrow Button
+          <button
+            onClick={flipNext}
+            disabled={currentPage === pages.length - 1 || isAnimating}
+            className={`
+              p-2 sm:p-3 md:p-3.5 lg:p-4 rounded-full
+              bg-white/10 backdrop-blur-xl border border-white/20
+              transition-all duration-300
+              ${
+                currentPage === pages.length - 1 || isAnimating
+                  ? "opacity-30 cursor-not-allowed"
+                  : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
+              }
+            `}
+            aria-label="Next page"
+          >
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white" />
+          </button>
+        )}
       </div>
+
+      {/* Save Book Modal */}
+      <SaveBookModal
+        isOpen={isSaveModalOpen}
+        onClose={() => setIsSaveModalOpen(false)}
+        onOpen={() => setIsSaveModalOpen(true)}
+      />
     </div>
   );
 };

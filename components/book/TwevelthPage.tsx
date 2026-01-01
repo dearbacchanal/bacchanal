@@ -52,42 +52,60 @@ const TwelfthPage = () => {
                 without specific agenda.
               </p>
             </div>
-            <div className="w-full max-w-md lg:max-w-[550px]">
-              <p className="text-sm sm:text-base lg:text-lg mb-2">
-                My drink of choice this Carnival:
-              </p>
-              <p className="text-sm sm:text-base lg:text-lg mb-2">
-                Who I limed with the most:
-              </p>
-              <p className="text-sm sm:text-base lg:text-lg mb-2">
-                I spent this epic time with:
-              </p>
-              <p className="text-sm sm:text-base lg:text-lg mb-2">
-                The best part of Carnival I'll be telling stories about for
-                years:
-              </p>
-              <div className="mt-4">
+            <div className="w-full px-10 space-y-6">
+              {/* Row 1 */}
+              <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
+                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                  My drink of choice this Carnival:
+                </p>
                 <TextInput
                   fieldId="drink-choice"
-                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white block w-full py-2 text-sm sm:text-base"
+                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
+              </div>
+
+              {/* Row 2 */}
+              <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
+                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                  Who I limed with the most:
+                </p>
                 <TextInput
                   fieldId="limed-with"
-                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full block py-2 text-sm sm:text-base"
+                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
+              </div>
+
+              {/* Row 3 */}
+              <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
+                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                  I spent this epic time with:
+                </p>
                 <TextInput
                   fieldId="spent-time-with"
-                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full block py-2 text-sm sm:text-base"
+                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
+              </div>
+
+              {/* Row 4 */}
+              <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
+                <p className="text-sm sm:text-base lg:text-md">
+                  The best part of Carnival I'll be telling stories about for
+                  years:
+                </p>
                 <TextInput
                   fieldId="best-part"
-                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full block py-2 text-sm sm:text-base"
+                  className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
               </div>
             </div>
           </div>
           <div className="w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex flex-col justify-center items-center z-10 py-10 lg:py-0">
-            <ImageBox id="box-12-1" rotation="rotate-[0deg]" size="portrait-large" placeholderText="Place Image" />
+            <ImageBox
+              id="box-12-1"
+              rotation="rotate-[0deg]"
+              size="portrait-large"
+              placeholderText="Place Image"
+            />
           </div>
         </div>
       </section>

@@ -61,7 +61,7 @@ const CTASection = () => {
           </p>
 
           <Button variant="accent" size="xl" asChild>
-            <Link href="/customize">Start Customizing</Link>
+            <Link href="/book">Start Customizing</Link>
           </Button>
         </div>
       </div>

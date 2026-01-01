@@ -1,7 +1,7 @@
-
-'use client';
+"use client";
 import { Kalam } from "next/font/google";
 import { TextInput } from "../ui/TextInput";
+import { TextArea } from "../ui/TextArea";
 
 const kalam = Kalam({
   subsets: ["latin"],
@@ -14,23 +14,30 @@ const TenthPage = () => {
       <div className="flex flex-col md:flex-row w-full h-full relative z-10">
         {/* Left Section - Quote */}
         <div className="w-full md:w-1/2 bg-[#9F2E2B] flex items-center justify-center p-6 sm:p-8 md:p-8 relative h-1/2 md:h-full">
-          <div className="relative max-w-sm mx-auto md:mx-0">
+          <div className="relative w-full max-w-xl px-4">
             {/* Left Quote Mark - Hidden on mobile */}
             <div className="relative hidden md:block">
-              <p className={`${kalam.className} font-black text-8xl absolute -top-24 -left-12 text-[#c8413d]`}>
+              <p
+                className={`${kalam.className} font-black text-8xl absolute -top-10 -left-12 text-[#c8413d]`}
+              >
                 ❝
               </p>
             </div>
 
             {/* Quote Text */}
-            <p className="font-handwritten font-black text-black text-lg sm:text-xl md:text-3xl max-w-sm leading-relaxed">
-              Me and carnival have a contract. Every year we go hard like nail. I
-              on de roadway with truck bigger than hummingbird.
-            </p>
+            <TextArea
+              fieldId="page10_quote"
+              placeholder="
+Me and carnival have a contract. Every year we go hard like nail. I on de roadway with truck bigger than hummingbird."
+              className="font-handwritten font-black placeholder:text-center text-black text-lg sm:text-xl md:text-3xl max-w-xl leading-relaxed bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-black/40 resize-none w-full"
+              rows={5}
+            />
 
             {/* Right Quote Mark - Hidden on mobile */}
             <div className="relative hidden md:block">
-              <p className={`${kalam.className} font-black text-8xl absolute right-40 top-10 text-[#c8413d]`}>
+              <p
+                className={`${kalam.className} font-black text-8xl absolute -right-10  text-[#c8413d]`}
+              >
                 ❞
               </p>
             </div>
@@ -40,12 +47,16 @@ const TenthPage = () => {
         {/* Right Section - Letter */}
         <div className="w-full md:w-1/2 bg-white flex flex-col items-center relative justify-center p-6 sm:p-8 md:p-8 h-1/2 md:h-full">
           <div className="max-w-sm mx-auto md:mx-0">
-            <p className="font-handwritten font-black text-[#ce3834] text-3xl sm:text-4xl md:text-5xl max-w-sm mb-6 sm:mb-8 md:mb-10">
-              Dear Bacchanal,
-            </p>
-            <p className="font-handwritten font-black text-[#ce3834] text-2xl sm:text-3xl md:text-4xl">
-              This is my Trinidad Carnival 2026.
-            </p>
+            <TextInput
+              fieldId="page10_greeting"
+              placeholder="Dear Bacchanal,"
+              className="font-handwritten font-black text-[#ce3834] text-3xl sm:text-4xl md:text-5xl max-w-sm mb-6 sm:mb-8 md:mb-10 bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-[#ce3834]/40 w-full"
+            />
+            <TextInput
+              fieldId="page10_message"
+              placeholder="This is my Trinidad Carnival 2026."
+              className="font-handwritten font-black text-[#ce3834] text-2xl sm:text-3xl md:text-4xl bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-[#ce3834]/40 w-full"
+            />
           </div>
 
           {/* Signature Input */}

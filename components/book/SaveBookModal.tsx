@@ -70,7 +70,7 @@ export function SaveBookModal({ isOpen, onClose, onOpen, onSaveSuccess }: SaveBo
     if (!isAuthenticated) {
       setWaitingForAuth(true);
       onClose(); // Close the save modal
-      openModal("signin"); // Open auth modal
+      openModal("signup"); // Open auth modal
       return;
     }
 

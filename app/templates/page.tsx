@@ -172,7 +172,7 @@ const TemplatesPage = () => {
               <h2 className="font-display text-2xl sm:text-3xl text-foreground mb-3">
                 No Books Yet
               </h2>
-              <p className="text-muted-foreground mb-8 text-sm sm:text-base">
+              <p className="text-black mb-8 text-sm sm:text-base">
                 Start your carnival journey by creating your first photo book
               </p>
               <Button

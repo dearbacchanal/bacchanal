@@ -247,14 +247,14 @@ const FAQs = () => {
                         className={`flex-shrink-0 w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all duration-500 mt-2 ${
                           openIndex === index
                             ? "border-primary bg-primary rotate-180"
-                            : "border-muted-foreground/30 group-hover:border-primary"
+                            : "border-black/30 group-hover:border-primary"
                         }`}
                       >
                         <ChevronDown
                           className={`w-5 h-5 transition-colors ${
                             openIndex === index
                               ? "text-primary-foreground"
-                              : "text-muted-foreground group-hover:text-primary"
+                              : "text-black group-hover:text-primary"
                           }`}
                         />
                       </div>
@@ -267,7 +267,7 @@ const FAQs = () => {
                       }`}
                     >
                       <div className="pl-20 sm:pl-24 pr-20">
-                        <p className="font-body text-lg text-muted-foreground leading-relaxed">
+                        <p className="font-body text-lg text-black leading-relaxed">
                           {faq.answer}
                         </p>
                       </div>
@@ -323,17 +323,17 @@ const FAQs = () => {
                 className="bg-transparent border-2 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-6"
                 asChild
               >
-                <a href="mailto:hello@bacchanal.com" className="gap-3">
+                <Link href="mailto:hello@bacchanal.com" className="gap-3">
                   Contact Support
                   <ArrowUpRight className="w-5 h-5" />
-                </a>
+                </Link>
               </Button>
               <Button
                 size="lg"
                 className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 text-lg px-8 py-6"
                 asChild
               >
-                <Link href="/customize" className="gap-3">
+                <Link href="/book" className="gap-3">
                   Start Creating
                   <ArrowUpRight className="w-5 h-5" />
                 </Link>

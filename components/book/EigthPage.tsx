@@ -16,7 +16,7 @@ const EigthPage = () => {
         />
         <div className="flex flex-col lg:flex-row">
           <div className="w-full lg:w-1/2 flex min-h-[50vh] lg:min-h-screen justify-center items-center px-6 py-10 lg:py-0">
-            <p className="text-base sm:text-xl lg:text-2xl text-center lg:text-left">
+            <p className="text-base sm:text-xl lg:text-3xl font-black text-center lg:text-left font-handwritten">
               ah tell uv I have it <br /> a cavnival tabanka
             </p>
           </div>

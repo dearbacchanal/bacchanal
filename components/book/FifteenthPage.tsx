@@ -65,15 +65,7 @@ const FifteenthPage = () => {
             <ImageBox id="box-15-6" rotation="rotate-[9deg]" size="portrait" />
           </div>
 
-          {/* Refined Save Book Button */}
-          <div className='flex justify-center w-full mt-12 z-20 pb-10'>
-            <button
-              onClick={() => setIsSaveModalOpen(true)}
-              className="px-8 sm:px-12 py-3 sm:py-5 rounded-full bg-gradient-to-r from-coral via-teal to-yellow text-white font-bold text-lg sm:text-xl hover:scale-105 active:scale-95 transition-all duration-300 shadow-2xl border-4 border-white/20 uppercase tracking-wider relative z-30"
-            >
-              Save My Carnival Book
-            </button>
-          </div>
+          
         </div>
       </section>
 

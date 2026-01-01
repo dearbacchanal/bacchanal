@@ -407,7 +407,7 @@ const CustomizeRitual = () => {
                   asChild
                   className="hero-cta-btn text-base px-8 py-6 shadow-carnival"
                 >
-                  <Link href="/customize" className="flex items-center gap-3">
+                  <Link href="/book" className="flex items-center gap-3">
                     Create Your Book
                     <ArrowRight className="w-5 h-5" />
                   </Link>
@@ -418,7 +418,7 @@ const CustomizeRitual = () => {
                   asChild
                   className="hero-cta-btn border-2 border-foreground/20 hover:bg-foreground/5"
                 >
-                  <Link href="/" className="flex items-center gap-2">
+                  <Link href="/templates" className="flex items-center gap-2">
                     <Play className="w-4 h-4" />
                     Watch Preview
                   </Link>
@@ -456,7 +456,7 @@ const CustomizeRitual = () => {
                       Your Story
                     </span>
                     <p className="font-body text-xs text-background/70">
-                      Carnival 2024
+                      Carnival 2026
                     </p>
                   </div>
                 </div>
@@ -556,7 +556,7 @@ const CustomizeRitual = () => {
               Begin your transformation
             </p>
             <Button variant="default" size="xl" asChild className="shadow-xl">
-              <Link href="/customize" className="flex items-center gap-3">
+              <Link href="/book" className="flex items-center gap-3">
                 Start The Ritual
                 <Sparkles className="w-5 h-5" />
               </Link>
@@ -690,7 +690,7 @@ const CustomizeRitual = () => {
                 asChild
                 className="cta-button group text-lg px-10 py-7"
               >
-                <Link href="/customize" className="flex items-center gap-3">
+                <Link href="/book" className="flex items-center gap-3">
                   Create Your Book
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </Link>
