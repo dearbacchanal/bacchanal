@@ -38,7 +38,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/customize"
+                  href="/book"
                   className="text-foreground/50 hover:text-primary transition-colors text-sm"
                 >
                   Customize Your Book

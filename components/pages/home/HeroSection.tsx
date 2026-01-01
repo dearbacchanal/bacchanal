@@ -245,7 +245,7 @@ const HeroSection = () => {
               asChild
               className="shadow-2xl shadow-purple-500/40 hover:shadow-purple-500/60 hover:scale-105 transition-all duration-300"
             >
-              <Link href="/customize">Customize Your Book</Link>
+              <Link href="/book">Customize Your Book</Link>
             </Button>
           </div>
 
