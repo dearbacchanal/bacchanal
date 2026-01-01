@@ -5,6 +5,8 @@ import gsap from "gsap";
 import { ChevronLeft, ChevronRight, Save } from "lucide-react";
 import Link from "next/link";
 import { SaveBookModal } from "./SaveBookModal";
+import { ShareBookModal } from "./ShareBookModal";
+import { useBookData } from "./BookDataContext";
 
 interface BookFlipProps {
   pages: React.ReactNode[];
@@ -15,6 +17,13 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState<boolean>(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  const { isReadOnly } = useBookData();
+
+  // When save completes, open share modal
+  const handleSaveSuccess = () => {
+    setIsShareModalOpen(true);
+  };
 
   const flipNext = () => {
     if (currentPage >= pages.length - 1 || isAnimating) return;
@@ -160,8 +169,8 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
         </Link>
 
         {/* Right Button - Next Arrow or Save Button */}
-        {currentPage === 14 ? (
-          // Save Button on fifteenth page
+        {currentPage === 14 && !isReadOnly ? (
+          // Save Button on fifteenth page (only in edit mode)
           <button
             onClick={() => setIsSaveModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-gradient-to-r from-coral via-teal to-yellow text-white font-semibold hover:opacity-90 hover:scale-105 transition-all duration-300 shadow-lg active:scale-95"
@@ -197,6 +206,13 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
         isOpen={isSaveModalOpen}
         onClose={() => setIsSaveModalOpen(false)}
         onOpen={() => setIsSaveModalOpen(true)}
+        onSaveSuccess={handleSaveSuccess}
+      />
+
+      {/* Share Book Modal */}
+      <ShareBookModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
       />
     </div>
   );
