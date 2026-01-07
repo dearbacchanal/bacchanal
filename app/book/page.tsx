@@ -17,24 +17,26 @@ import ThirteenthPage from "@/components/book/ThirteenthPage";
 import TwevelthPage from "@/components/book/TwevelthPage";
 import { AuthModal } from "@/components/auth/AuthModal";
 import { BookFlip } from "@/components/book/BookFlip";
+import Sponser from "@/components/book/Sponser";
 
 const page = () => {
   const pages = [
-    <FirstPage key="page-1" />,
-    <SecondPage key="page-2" />,
-    <ThirdPage key="page-3" />,
-    <ForthPage key="page-4" />,
-    <FifthPage key="page-5" />,
-    <SixthPage key="page-6" />,
-    <SeventhPage key="page-7" />,
-    <EigthPage key="page-8" />,
-    <NinthPage key="page-9" />,
-    <TenthPage key="page-10" />,
-    <EleventhPage key="page-11" />,
-    <TwevelthPage key="page-12" />,
-    <ThirteenthPage key="page-13" />,
-    <ForteenPage key="page-14" />,
-    <FifteenthPage key="page-15" />,
+    <EigthPage key="page-1" />,
+    <TenthPage key="page-2" />,
+    <NinthPage key="page-3" />,
+    <EleventhPage key="page-4" />,
+    <FifteenthPage key="page-4" />,
+    <TwevelthPage key="page-6" />,
+    <Sponser key="page-7" />,
+    <ThirteenthPage key="page-8" />,
+    <ForteenPage key="page-9" />,
+    <FifthPage key="page-10" />,
+    <SixthPage key="page-11" />,
+    <SeventhPage key="page-12" />,
+    <ForthPage key="page-13" />,
+    <SecondPage key="page-14" />,
+    <ThirdPage key="page-15" />,
+    <FirstPage key="page-16" />,
   ];
 
   return (
@@ -46,3 +48,29 @@ const page = () => {
 };
 
 export default page;
+
+// const page = () => {
+//   return (
+//     <div>
+//       <EigthPage />
+//       <TenthPage />
+//       <NinthPage />
+//       <EleventhPage />
+//       <FifteenthPage />
+//       <TwevelthPage />
+//       <Sponser />
+//       <ThirteenthPage />
+//       <ForteenPage />
+//       <FifthPage />
+//       <SixthPage />
+//       <SeventhPage />
+//       <ForthPage />
+//       <SecondPage />
+//       <ThirdPage />
+//       <FirstPage />
+
+//     </div>
+//   );
+// };
+
+// export default page;

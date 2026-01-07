@@ -25,7 +25,7 @@ const ThirteenthPage = () => {
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid md:grid-cols-2 gap-8 ">
+          <div className="grid lg:grid-cols-2 gap-8 ">
             {/* January */}
             <div className=" rounded-3xl p-6  ">
               <h2

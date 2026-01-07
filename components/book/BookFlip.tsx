@@ -169,7 +169,7 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
         </Link>
 
         {/* Right Button - Next Arrow or Save Button */}
-        {currentPage === 14 && !isReadOnly ? (
+        {currentPage === 15 && !isReadOnly ? (
           // Save Button on fifteenth page (only in edit mode)
           <button
             onClick={() => setIsSaveModalOpen(true)}

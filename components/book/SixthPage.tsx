@@ -14,8 +14,8 @@ const SixthPage = () => {
           priority
         />
 
-        <div className="flex flex-col lg:flex-row px-4 sm:px-6 lg:px-0">
-          <div className="relative w-full lg:w-1/2 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] mb-8 lg:mb-0">
+        <div className="flex flex-col xl:flex-row px-4 sm:px-6 lg:px-0">
+          <div className="relative w-full xl:w-1/2 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] mb-8 lg:mb-0">
             {/* Box 1 - Horizontal */}
             <div className="left-4 sm:left-10 lg:left-20 absolute top-0">
               <ImageBox id="box-6-left-1" rotation="rotate-[-3deg]" size="horizontal" showWhiteBar={false} />
@@ -29,7 +29,7 @@ const SixthPage = () => {
               <ImageBox id="box-6-left-3" rotation="rotate-[6deg]" size="vertical" showWhiteBar={false} />
             </div>
           </div>
-          <div className="relative w-full lg:w-1/2 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]">
+          <div className="relative w-full xl:w-1/2 min-h-[400px] sm:min-h-[500px] lg:min-h-[600px]">
             {/* Box 1 - Tall Vertical */}
             <div className="left-4 sm:left-10 lg:left-20 absolute top-0">
               <ImageBox id="box-6-right-1" rotation="rotate-[-3deg]" size="tall-vertical" showWhiteBar={false} />

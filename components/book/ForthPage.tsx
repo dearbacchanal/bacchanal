@@ -5,7 +5,7 @@ const ForthPage = () => {
   return (
     <>
       {/* Fourth page */}
-            <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col lg:flex-row">
+            <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col xl:flex-row">
               <div className="w-full lg:w-1/2 pt-8 sm:pt-12 lg:pt-16 px-6 sm:px-8 lg:pl-10">
                 <h1 className={`${kalufira.className} text-5xl sm:text-7xl lg:text-[200px] leading-tight sm:leading-tight lg:leading-[170px]`}>
                   <span className="">TELL</span>
@@ -16,7 +16,7 @@ const ForthPage = () => {
                   <span className="text-black block text-6xl sm:text-8xl lg:text-[250px]">TRINI</span>
                 </h1>
               </div>
-              <div className="w-full lg:w-1/2 relative flex justify-start items-center px-6 sm:px-8 ">
+              <div className="w-full xl:w-1/2 relative flex justify-start items-center px-6 sm:px-8 ">
                 <Image
                   src="/assets/layer-4.png"
                   alt="Layer background"

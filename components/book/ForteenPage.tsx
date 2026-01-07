@@ -9,7 +9,7 @@ const FourteenPage = () => {
   return (
     <>
       {/* Fourteen Page */}
-      <section className="w-full min-h-screen flex flex-col lg:flex-row">
+      <section className="w-full min-h-screen flex flex-col xl:flex-row">
         <Image
           src="/assets/layer-18.png"
           alt="Overlay"
@@ -18,7 +18,7 @@ const FourteenPage = () => {
           className="object-cover absolute pointer-events-none z-10 hidden lg:block"
           priority
         />
-        <div className="w-full lg:w-1/2 bg-[#bfbf40] relative overflow-hidden min-h-[50vh] lg:min-h-screen flex items-center justify-center lg:block lg:pt-20">
+        <div className="w-full xl:w-1/2 bg-[#bfbf40] relative overflow-hidden min-h-[50vh] lg:min-h-screen flex items-center justify-center lg:block lg:pt-20">
           <div className="py-10 lg:py-0">
             <h1
               className={`${kalufira.className} text-black text-5xl sm:text-7xl lg:text-[200px] relative lg:top-28 rotate-[-10deg] text-center lg:text-left px-4 lg:px-0`}
@@ -35,13 +35,13 @@ const FourteenPage = () => {
               <h1
                 className={`${kalufira.className} text-black text-4xl sm:text-6xl lg:text-[150px] text-center lg:text-end`}
               >
-                ABOUT UR
-                <span className="block sm:hidden">VIBE</span>
+                ABOUT UR <br /> 
+                <span className=" xl:hidden block text-black ">VIBE</span>
               </h1>
             </div>
           </div>
         </div>
-        <div className="w-full lg:w-1/2 bg-[#fbdc36] flex justify-start px-4 sm:px-6 lg:pl-10 items-center relative overflow-hidden min-h-[50vh] lg:min-h-screen py-10 lg:py-0">
+        <div className="w-full xl:w-1/2 bg-[#fbdc36] flex justify-start px-4 sm:px-6 lg:pl-10 items-center relative overflow-hidden min-h-[50vh] lg:min-h-screen py-10 lg:py-0">
           <Image
             src="/assets/layer-19.png"
             alt="Overlay"
@@ -102,7 +102,7 @@ const FourteenPage = () => {
               />
             </div>
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <h1
               className={`${kalufira.className} absolute left-20 text-black text-[300px]`}
             >

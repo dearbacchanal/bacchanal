@@ -14,13 +14,13 @@ const EigthPage = () => {
           className="object-cover pointer-events-none"
           priority
         />
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-full lg:w-1/2 flex min-h-[50vh] lg:min-h-screen justify-center items-center px-6 py-10 lg:py-0">
+        <div className="flex flex-col xl:flex-row">
+          <div className="w-full xl:w-1/2 flex min-h-[50vh] xl:min-h-screen justify-center items-center px-6 py-10 lg:py-0">
             <p className="text-base sm:text-xl lg:text-3xl font-black text-center lg:text-left font-handwritten">
               ah tell uv I have it <br /> a cavnival tabanka
             </p>
           </div>
-          <div className="w-full lg:w-1/2 flex z-10 min-h-[50vh] lg:min-h-screen justify-center items-center px-6 py-10 lg:py-0">
+          <div className="w-full xl:w-1/2 flex z-10 min-h-[50vh] xl:min-h-screen justify-center items-center px-6 py-10 lg:py-0">
             <h1
               className={`${kalufira.className} leading-tight sm:leading-[60px] lg:leading-[100px] text-5xl sm:text-7xl lg:text-[130px] text-center`}
             >

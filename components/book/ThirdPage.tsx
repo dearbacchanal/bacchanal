@@ -14,8 +14,8 @@ const ThirdPage = () => {
           className="absolute object-contain bottom-0 right-0 w-64 sm:w-96 lg:w-[900px]"
           priority
         />
-        <div className="flex flex-col lg:flex-row justify-between items-start z-10 relative px-4 sm:px-8 lg:px-0">
-          <div className="p-6 sm:p-10 lg:p-20 w-full lg:w-1/2">
+        <div className="flex flex-col xl:flex-row justify-between items-start z-10 relative px-4 sm:px-8 lg:px-0">
+          <div className="p-6 sm:p-10 lg:p-20 w-full xl:w-1/2">
             <h1
               className={`${kalufira.className} text-white text-3xl sm:text-4xl lg:text-6xl`}
             >
@@ -43,8 +43,8 @@ const ThirdPage = () => {
               rhythm.
             </p>
           </div>
-          <div className="w-full lg:w-1/2 p-6 sm:p-10 lg:p-20 ">
-            <p className="text-white text-base sm:text-lg lg:text-xl mt-6 lg:mt-10">
+          <div className="w-full xl:w-1/2 p-6 sm:p-10 lg:p-20 ">
+            <p className="text-white text-base sm:text-lg lg:text-xl mt-6 xl:mt-10">
               From calypso to steelpan, from the fierceness of Jab to the
               swagger of the Fancy Sailor, every character carries a chapter of
               resistance, memory, and cultural pride. And every Carnival, when

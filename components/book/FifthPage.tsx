@@ -5,8 +5,8 @@ const FifthPage = () => {
   return (
     <>
       {/* Fifth Page */}
-      <section className="relative min-h-screen w-full overflow-hidden flex flex-col lg:flex-row">
-        <div className="w-full lg:w-1/2 bg-[#fbba00] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] lg:min-h-screen">
+      <section className="relative min-h-screen w-full overflow-hidden flex flex-col xl:flex-row">
+        <div className="w-full xl:w-1/2 bg-[#fbba00] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] xl:min-h-screen">
           <Image
             src="/assets/layer-9.png"
             alt="Layer background"
@@ -31,7 +31,7 @@ const FifthPage = () => {
             CULTUAL <span className="block">EVENTS</span>
           </h1>
         </div>
-        <div className="w-full lg:w-1/2 bg-[#143951] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] lg:min-h-screen">
+        <div className="w-full xl:w-1/2 bg-[#143951] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] xl:min-h-screen">
           {/* Overlay Image */}
           <Image
             src="/assets/layer-7.png"

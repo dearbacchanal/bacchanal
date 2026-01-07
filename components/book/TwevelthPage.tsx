@@ -15,8 +15,8 @@ const TwelfthPage = () => {
           priority
         />
 
-        <div className="flex flex-col lg:flex-row">
-          <div className="w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen z-10 flex flex-col items-center gap-10 sm:gap-14 lg:gap-20 px-4 sm:px-6 lg:px-8 py-10 lg:py-0 justify-center">
+        <div className="flex flex-col xl:flex-row">
+          <div className="w-full xl:w-1/2 min-h-[50vh] xl:min-h-screen z-10 flex flex-col items-center gap-10 sm:gap-14 lg:gap-20 px-4 sm:px-6 lg:px-8 py-10 lg:py-0 justify-center">
             <div>
               <h1 className="font-bold leading-none text-center">
                 {/* W */}
@@ -99,7 +99,7 @@ const TwelfthPage = () => {
               </div>
             </div>
           </div>
-          <div className="w-full lg:w-1/2 min-h-[50vh] lg:min-h-screen flex flex-col justify-center items-center z-10 py-10 lg:py-0">
+          <div className="w-full xl:w-1/2 min-h-[50vh] xl:min-h-screen flex flex-col justify-center items-center z-10 py-10 lg:py-0">
             <ImageBox
               id="box-12-1"
               rotation="rotate-[0deg]"

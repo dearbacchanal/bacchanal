@@ -15,8 +15,8 @@ const NinthPage = () => {
             priority
           />
         </div>
-        <div className="flex flex-col lg:flex-row min-h-screen">
-          <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:pl-10 z-10 flex flex-col justify-start items-center py-10 lg:py-0">
+        <div className="flex flex-col xl:flex-row min-h-screen">
+          <div className="w-full xl:w-1/2 px-6 sm:px-8 lg:pl-10 z-10 flex flex-col justify-start items-center py-10 xl:py-0">
             <h1
               className={`text-4xl sm:text-6xl lg:text-[90px] ${kalufira.className} text-center lg:text-left`}
             >
@@ -34,7 +34,7 @@ const NinthPage = () => {
               </p>
             </div>
           </div>
-          <div className="w-full lg:w-1/2 px-6 sm:px-8 lg:px-0 z-10 flex flex-col justify-start items-center py-10 lg:py-0">
+          <div className="w-full xl:w-1/2 px-6 sm:px-8 xl:px-0 z-10 flex flex-col justify-start items-center py-10 xl:py-0">
             <h1
               className={`text-4xl sm:text-6xl lg:text-[90px] ${kalufira.className} text-center lg:text-left`}
             >
