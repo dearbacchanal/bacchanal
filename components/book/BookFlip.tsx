@@ -103,11 +103,10 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
               ref={(el: any) => (pagesRef.current[index] = el)}
               className={`
     absolute inset-0 w-full h-full bg-white
-    ${
-      index === currentPage
-        ? "overflow-y-auto overscroll-contain"
-        : "overflow-hidden"
-    }
+    ${index === currentPage
+                  ? "overflow-y-auto overscroll-contain"
+                  : "overflow-hidden"
+                }
   `}
               style={{
                 transformStyle: "preserve-3d",
@@ -139,10 +138,9 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
             p-2 sm:p-3 md:p-3.5 lg:p-4 rounded-full
             bg-white/10 backdrop-blur-xl border border-white/20
             transition-all duration-300
-            ${
-              currentPage === 0 || isAnimating
-                ? "opacity-30 cursor-not-allowed"
-                : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
+            ${currentPage === 0 || isAnimating
+              ? "opacity-30 cursor-not-allowed"
+              : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
             }
           `}
           aria-label="Previous page"
@@ -188,10 +186,9 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
               p-2 sm:p-3 md:p-3.5 lg:p-4 rounded-full
               bg-white/10 backdrop-blur-xl border border-white/20
               transition-all duration-300
-              ${
-                currentPage === pages.length - 1 || isAnimating
-                  ? "opacity-30 cursor-not-allowed"
-                  : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
+              ${currentPage === pages.length - 1 || isAnimating
+                ? "opacity-30 cursor-not-allowed"
+                : "hover:bg-white/20 hover:scale-110 hover:shadow-lg hover:shadow-white/10 cursor-pointer active:scale-95"
               }
             `}
             aria-label="Next page"

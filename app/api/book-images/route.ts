@@ -6,10 +6,11 @@ import { auth } from "@/lib/auth";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
+    const userId = session?.user?.id;
 
-    // For now, we'll use a session-based or guest approach
-    // If user is logged in, use their user ID, otherwise use a guest identifier
-    const userId = session?.user?.id || "guest";
+    if (!userId) {
+      return NextResponse.json({ images: {} }, { status: 200 });
+    }
 
     const db = await getDatabase();
     const imagesCollection = db.collection("book_images");
@@ -35,7 +36,14 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    const userId = session?.user?.id || "guest";
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
     const body = await req.json();
     const { imageId, imageUrl } = body;
@@ -83,7 +91,14 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const session = await auth();
-    const userId = session?.user?.id || "guest";
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
     const { searchParams } = new URL(req.url);
     const imageId = searchParams.get("imageId");

@@ -6,7 +6,11 @@ import { auth } from "@/lib/auth";
 export async function GET(req: NextRequest) {
   try {
     const session = await auth();
-    const userId = session?.user?.id || "guest";
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json({ data: {} }, { status: 200 });
+    }
 
     const db = await getDatabase();
     const dataCollection = db.collection("book_data");
@@ -32,7 +36,14 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const session = await auth();
-    const userId = session?.user?.id || "guest";
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
     const body = await req.json();
     const { fieldId, value } = body;
