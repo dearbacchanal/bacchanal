@@ -1,77 +1,165 @@
-import Image from 'next/image'
-import { kalufira } from './Font'
+"use client";
+import Image from 'next/image';
+import { kalufira } from './Font';
+import { useBookData } from './BookDataContext';
+import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "@/hooks/useAuthModal";
+
+const triniItems = [
+  'Maracas Bake & Shark',
+  'Went ah pan yard',
+  'Doubles with everything and slight peppah for the win',
+  'Saw d Magnificent Seven while chippin round the Savannah',
+  'Coconut water straight from d nut by the truck on the Savannah',
+  'Limed on the Avenue',
+  'Rum must drink – Angostura, Forres Park, or Fernandez',
+  'Beastly cold Stag or Carib in the hot sun',
+  'Roti & a soft drink was lashinnn',
+  'Legs sore from all the winin',
+  'Took a lil escape – beach, DDI, waterfalls',
+  'Snow cone',
+  'Unwind in Nylon Pool',
+];
 
 const ForthPage = () => {
+  const { data, isReadOnly } = useBookData();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
+  const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Load checked items from context or fetch from API
+  useEffect(() => {
+    if (data.textData && data.textData['trini-checklist']) {
+      try {
+        const savedItems = JSON.parse(data.textData['trini-checklist']);
+        setCheckedItems(savedItems);
+      } catch (error) {
+        console.error('Error parsing trini checklist data:', error);
+      }
+    } else if (!isReadOnly) {
+      // Fetch from API if not in read-only mode
+      const fetchChecklist = async () => {
+        try {
+          const response = await fetch('/api/book-data');
+          if (response.ok) {
+            const result = await response.json();
+            if (result.textData && result.textData['trini-checklist']) {
+              const savedItems = JSON.parse(result.textData['trini-checklist']);
+              setCheckedItems(savedItems);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching checklist:', error);
+        }
+      };
+      fetchChecklist();
+    }
+  }, [data.textData, isReadOnly]);
+
+  const handleCheckboxChange = async (item: string) => {
+    if (isReadOnly) return;
+
+    if (!session) {
+      openModal("signin");
+      return;
+    }
+
+    const newCheckedItems = {
+      ...checkedItems,
+      [item]: !checkedItems[item],
+    };
+
+    setCheckedItems(newCheckedItems);
+
+    // Save to database
+    setIsLoading(true);
+    try {
+      const response = await fetch('/api/book-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fieldId: 'trini-checklist',
+          value: JSON.stringify(newCheckedItems),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save checklist');
+      }
+    } catch (error) {
+      console.error('Error saving checklist:', error);
+      toast.error('Failed to save. Please try again.');
+      // Revert the change on error
+      setCheckedItems(checkedItems);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {/* Fourth page */}
-            <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col xl:flex-row">
-              <div className="w-full lg:w-1/2 pt-8 sm:pt-12 lg:pt-16 px-6 sm:px-8 lg:pl-10">
-                <h1 className={`${kalufira.className} text-5xl sm:text-7xl lg:text-[200px] leading-tight sm:leading-tight lg:leading-[170px]`}>
-                  <span className="">TELL</span>
-                  <span className="text-black ">MEH</span>
-                  <span className="text-white block ">
-                    <span className="text-3xl sm:text-5xl lg:text-[120px]">You're</span> AH
-                  </span>
-                  <span className="text-black block text-6xl sm:text-8xl lg:text-[250px]">TRINI</span>
-                </h1>
+      <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col xl:flex-row">
+        <div className="w-full lg:w-1/2 pt-8 sm:pt-12 lg:pt-16 px-6 sm:px-8 lg:pl-10">
+          <h1 className={`${kalufira.className} text-5xl sm:text-7xl lg:text-[200px] leading-tight sm:leading-tight lg:leading-[170px]`}>
+            <span className="">TELL</span>
+            <span className="text-black ">MEH</span>
+            <span className="text-white block ">
+              <span className="text-3xl sm:text-5xl lg:text-[120px]">You're</span> AH
+            </span>
+            <span className="text-black block text-6xl sm:text-8xl lg:text-[250px]">TRINI</span>
+          </h1>
+        </div>
+        <div className="w-full xl:w-1/2 relative flex justify-start items-center px-6 sm:px-8 ">
+          <Image
+            src="/assets/layer-4.png"
+            alt="Layer background"
+            width={250}
+            height={250}
+            className="absolute object-contain lg:top-[-50px]  left-0 w-32 sm:w-40 lg:w-[250px] h-32 sm:h-40 lg:h-[250px]"
+            priority
+          />
+          <Image
+            src="/assets/layer-5.png"
+            alt="Layer background"
+            width={250}
+            height={250}
+            className="absolute object-contain top-10 right-4 sm:right-6 lg:right-10 w-32 sm:w-40 lg:w-[250px] h-32 sm:h-40 lg:h-[250px]"
+            priority
+          />
+          <Image
+            src="/assets/layer-6.png"
+            alt="Layer background"
+            width={200}
+            height={200}
+            className="absolute object-contain bottom-0 right-0 w-24 sm:w-32 lg:w-[200px] h-24 sm:h-32 lg:h-[200px]"
+            priority
+          />
+          <div className="mt-10 sm:mt-28 lg:mt-36 relative z-10">
+            {triniItems.map((item, index) => (
+              <div
+                key={index}
+                className={`text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3 flex items-start gap-2 ${!isReadOnly ? 'cursor-pointer hover:opacity-80' : ''}`}
+                onClick={() => handleCheckboxChange(item)}
+              >
+                <span className="flex-shrink-0 select-none">
+                  {checkedItems[item] ? '✓' : '○'}
+                </span>
+                <span className={checkedItems[item] ? 'line-through opacity-70' : ''}>
+                  {item}
+                </span>
               </div>
-              <div className="w-full xl:w-1/2 relative flex justify-start items-center px-6 sm:px-8 ">
-                <Image
-                  src="/assets/layer-4.png"
-                  alt="Layer background"
-                  width={250}
-                  height={250}
-                  className="absolute object-contain lg:top-[-50px]  left-0 w-32 sm:w-40 lg:w-[250px] h-32 sm:h-40 lg:h-[250px]"
-                  priority
-                />
-                <Image
-                  src="/assets/layer-5.png"
-                  alt="Layer background"
-                  width={250}
-                  height={250}
-                  className="absolute object-contain top-10 right-4 sm:right-6 lg:right-10 w-32 sm:w-40 lg:w-[250px] h-32 sm:h-40 lg:h-[250px]"
-                  priority
-                />
-                <Image
-                  src="/assets/layer-6.png"
-                  alt="Layer background"
-                  width={200}
-                  height={200}
-                  className="absolute object-contain bottom-0 right-0 w-24 sm:w-32 lg:w-[200px] h-24 sm:h-32 lg:h-[200px]"
-                  priority
-                />
-                <div className=" mt-10 sm:mt-28 lg:mt-36 relative z-10">
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Maracas Bake & Shark</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Went ah pan yard</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Doubles with everything and slight peppah for the win
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Saw d Magnificent Seven while chippin round the Savannah
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Coconut water straight from d nut by the truck on the Savannah
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Limed on the Avenue</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Rum must drink – Angostura, Forres Park, or Fernandez
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Beastly cold Stag or Carib in the hot sun
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Roti & a soft drink was lashinnn</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Legs sore from all the winin'</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">
-                    ✓ Took a lil' escape – beach, DDI, waterfalls
-                  </p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Snow cone</p>
-                  <p className="text-sm sm:text-base lg:text-xl mb-2 sm:mb-2.5 lg:mb-3">✓ Unwind in Nylon Pool</p>
-                </div>
-              </div>
-            </section>
+            ))}
+          </div>
+        </div>
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default ForthPage
+export default ForthPage;

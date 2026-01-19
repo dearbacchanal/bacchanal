@@ -4,6 +4,8 @@ import { useRef, useState, useEffect } from "react";
 import { useUploadThing } from "@/lib/uploadthing-client";
 import { toast } from "sonner";
 import { useBookData } from "@/components/book/BookDataContext";
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 interface ImageBoxProps {
   id: string;
@@ -11,6 +13,7 @@ interface ImageBoxProps {
   size?: "default" | "large" | "xlarge" | "horizontal" | "vertical" | "tall-vertical" | "portrait" | "portrait-large";
   showWhiteBar?: boolean;
   placeholderText?: string;
+  className?: string;
 }
 
 export const ImageBox: React.FC<ImageBoxProps> = ({
@@ -18,9 +21,12 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
   rotation,
   size = "default",
   showWhiteBar = true,
-  placeholderText
+  placeholderText,
+  className = ""
 }) => {
   const { data, isReadOnly } = useBookData();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
   const [image, setImage] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -94,6 +100,12 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
 
   const handleBoxClick = () => {
     if (isReadOnly) return;
+
+    if (!session) {
+      openModal("signin");
+      return;
+    }
+
     if (!isUploading) {
       fileInputRef.current?.click();
     }
@@ -189,7 +201,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
   const { box: boxSizeClasses, bar: whiteBarSizeClasses } = getSizeClasses();
 
   return (
-    <div className={rotation}>
+    <div className={`${rotation} ${className}`}>
       <div
         onClick={handleBoxClick}
         className={`${boxSizeClasses} bg-black/45 ${!isReadOnly ? 'cursor-pointer hover:opacity-80' : ''} overflow-hidden relative transition-opacity group flex items-center justify-center`}

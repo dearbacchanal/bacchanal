@@ -139,16 +139,16 @@ const HeroSection = () => {
         {/* Layered Overlays for Depth */}
         {/* Dark gradient from bottom */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-        
+
         {/* Blur overlay for depth */}
         <div className="absolute inset-0 backdrop-blur-[2px]" />
-        
+
         {/* Radial gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/20 to-black/80" />
-        
+
         {/* Vignette effect */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
-        
+
         {/* Animated gradient pulse */}
         <div className="absolute inset-0 bg-gradient-to-tr from-purple-600/10 via-pink-500/10 to-orange-500/10 animate-pulse-subtle opacity-60" />
       </div>
@@ -202,11 +202,10 @@ const HeroSection = () => {
                 ref={(el) => {
                   if (el) titleWordsRef.current[index] = el;
                 }}
-                className={`inline-block mx-2 sm:mx-3 ${
-                  word === "BACCHANAL"
+                className={`inline-block mx-2 sm:mx-3 ${word === "BACCHANAL"
                     ? "bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text text-transparent"
                     : ""
-                }`}
+                  }`}
                 style={{
                   transformStyle: "preserve-3d",
                   textShadow:
@@ -249,8 +248,20 @@ const HeroSection = () => {
             </Button>
           </div>
 
+          {/* Sponsor Banner */}
+          <div className="mt-16 flex justify-center">
+            <Image
+              src="/assets/full-banner.jpeg"
+              alt="Sponsored by Crix & Carnival - The Perfect Pair"
+              width={640}
+              height={93}
+              className="w-full max-w-2xl h-auto rounded-lg shadow-2xl"
+              priority
+            />
+          </div>
+
           {/* Scroll Indicator */}
-          <div className="mt-24 animate-bounce-subtle">
+          <div className="mt-16 animate-bounce-subtle">
             <span className="font-handwritten text-gray-300 text-lg drop-shadow-md">
               Scroll to explore
             </span>

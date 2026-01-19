@@ -8,7 +8,7 @@ export const ourFileRouter = {
   // Image uploader for book pages
   bookImageUploader: f({
     image: {
-      maxFileSize: "4MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })

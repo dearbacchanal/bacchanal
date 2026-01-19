@@ -1,8 +1,137 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { kalufira } from "./Font";
 import Image from "next/image";
+import { CalendarEventModal } from "@/components/ui/CalendarEventModal";
+import { useBookData } from "./BookDataContext";
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "@/hooks/useAuthModal";
+
+interface CalendarEvent {
+  day: number;
+  month: string;
+  eventName: string;
+}
 
 const ThirteenthPage = () => {
+  const { data, isReadOnly } = useBookData();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<{ day: number; month: string } | null>(null);
+
+  // Load events from context or fetch from API
+  useEffect(() => {
+    if (data.textData && data.textData['calendar-events']) {
+      try {
+        const savedEvents = JSON.parse(data.textData['calendar-events']);
+        setEvents(savedEvents);
+      } catch (error) {
+        console.error('Error parsing calendar events:', error);
+      }
+    } else if (!isReadOnly) {
+      const fetchEvents = async () => {
+        try {
+          const response = await fetch('/api/book-data');
+          if (response.ok) {
+            const result = await response.json();
+            if (result.textData && result.textData['calendar-events']) {
+              const savedEvents = JSON.parse(result.textData['calendar-events']);
+              setEvents(savedEvents);
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching calendar events:', error);
+        }
+      };
+      fetchEvents();
+    }
+  }, [data.textData, isReadOnly]);
+
+  const handleDateClick = (day: number, month: string) => {
+    if (!session) {
+      openModal("signin");
+      return;
+    }
+
+    setSelectedDate({ day, month });
+    setIsModalOpen(true);
+  };
+
+  const handleSaveEvent = async (eventName: string) => {
+    if (!selectedDate) return;
+
+    const newEvents = events.filter(
+      (e) => !(e.day === selectedDate.day && e.month === selectedDate.month)
+    );
+
+    if (eventName.trim()) {
+      newEvents.push({
+        day: selectedDate.day,
+        month: selectedDate.month,
+        eventName: eventName.trim(),
+      });
+    }
+
+    setEvents(newEvents);
+
+    // Save to database
+    try {
+      const response = await fetch('/api/book-data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fieldId: 'calendar-events',
+          value: JSON.stringify(newEvents),
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save event');
+      }
+    } catch (error) {
+      console.error('Error saving event:', error);
+      toast.error('Failed to save event. Please try again.');
+    }
+  };
+
+  const getEventForDate = (day: number, month: string) => {
+    return events.find((e) => e.day === day && e.month === month);
+  };
+
+  const renderCalendarDay = (day: number, month: string, isSpecial?: boolean, specialLabel?: string) => {
+    const event = getEventForDate(day, month);
+    const hasEvent = !!event;
+
+    return (
+      <div
+        className={`rounded-lg flex flex-col items-center justify-center h-16 ${!isReadOnly ? 'cursor-pointer hover:bg-white/10 transition-colors' : ''
+          } relative group`}
+        onClick={() => handleDateClick(day, month)}
+      >
+        <span className="text-2xl text-black">{day}</span>
+        {hasEvent && (
+          <span className="text-[10px] sm:text-xs text-black font-handwritten font-bold truncate max-w-full px-1">
+            {event.eventName}
+          </span>
+        )}
+        {isSpecial && specialLabel && (
+          <span
+            className={`${kalufira.className} text-white text-[15px] sm:text-lg font-black block -mt-1`}
+            style={{ WebkitTextStroke: "1px black" }}
+          >
+            {specialLabel}
+          </span>
+        )}
+      </div>
+    );
+  };
+
+  const currentEvent = selectedDate ? getEventForDate(selectedDate.day, selectedDate.month) : null;
   return (
     <>
       {/* Thirteenth Page */}
@@ -55,107 +184,45 @@ const ThirteenthPage = () => {
                 <div className="h-16"></div>
                 <div className="h-16"></div>
                 <div className="h-16"></div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">1</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">2</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">3</span>
-                </div>
+                {renderCalendarDay(1, "January")}
+                {renderCalendarDay(2, "January")}
+                {renderCalendarDay(3, "January")}
 
                 {/* Week 2 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">4</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">5</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">6</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">7</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">8</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">9</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">10</span>
-                </div>
+                {renderCalendarDay(4, "January")}
+                {renderCalendarDay(5, "January")}
+                {renderCalendarDay(6, "January")}
+                {renderCalendarDay(7, "January")}
+                {renderCalendarDay(8, "January")}
+                {renderCalendarDay(9, "January")}
+                {renderCalendarDay(10, "January")}
 
                 {/* Week 3 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">11</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">12</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">13</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">14</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">15</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">16</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">17</span>
-                </div>
+                {renderCalendarDay(11, "January")}
+                {renderCalendarDay(12, "January")}
+                {renderCalendarDay(13, "January")}
+                {renderCalendarDay(14, "January")}
+                {renderCalendarDay(15, "January")}
+                {renderCalendarDay(16, "January")}
+                {renderCalendarDay(17, "January")}
 
                 {/* Week 4 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">18</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">19</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">20</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">21</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">22</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">23</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">24</span>
-                </div>
+                {renderCalendarDay(18, "January")}
+                {renderCalendarDay(19, "January")}
+                {renderCalendarDay(20, "January")}
+                {renderCalendarDay(21, "January")}
+                {renderCalendarDay(22, "January")}
+                {renderCalendarDay(23, "January")}
+                {renderCalendarDay(24, "January")}
 
                 {/* Week 5 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">25</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">26</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">27</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">28</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">29</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">30</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">31</span>
-                </div>
+                {renderCalendarDay(25, "January")}
+                {renderCalendarDay(26, "January")}
+                {renderCalendarDay(27, "January")}
+                {renderCalendarDay(28, "January")}
+                {renderCalendarDay(29, "January")}
+                {renderCalendarDay(30, "January")}
+                {renderCalendarDay(31, "January")}
               </div>
             </div>
 
@@ -184,55 +251,25 @@ const ThirteenthPage = () => {
               {/* Calendar Days */}
               <div className="grid grid-cols-7 gap-2">
                 {/* Week 1 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">1</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">2</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">3</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">4</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">5</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">6</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">7</span>
-                </div>
+                {renderCalendarDay(1, "February")}
+                {renderCalendarDay(2, "February")}
+                {renderCalendarDay(3, "February")}
+                {renderCalendarDay(4, "February")}
+                {renderCalendarDay(5, "February")}
+                {renderCalendarDay(6, "February")}
+                {renderCalendarDay(7, "February")}
 
                 {/* Week 2 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">8</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">9</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">10</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">11</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">12</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">13</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">14</span>
-                </div>
+                {renderCalendarDay(8, "February")}
+                {renderCalendarDay(9, "February")}
+                {renderCalendarDay(10, "February")}
+                {renderCalendarDay(11, "February")}
+                {renderCalendarDay(12, "February")}
+                {renderCalendarDay(13, "February")}
+                {renderCalendarDay(14, "February")}
 
                 {/* Week 3 - Carnival Days */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">15</span>
-                </div>
+                {renderCalendarDay(15, "February")}
                 <div className=" rotate-[-8deg] ">
                   <span
                     className={`${kalufira.className} text-white hidden sm:block text-[15px] sm:text-lg font-black `}
@@ -262,45 +299,35 @@ const ThirteenthPage = () => {
                     Tuseday
                   </span>
                 </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">18</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">19</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">20</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">21</span>
-                </div>
+                {renderCalendarDay(18, "February")}
+                {renderCalendarDay(19, "February")}
+                {renderCalendarDay(20, "February")}
+                {renderCalendarDay(21, "February")}
 
                 {/* Week 4 */}
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">22</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">23</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">24</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">25</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">26</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">27</span>
-                </div>
-                <div className=" rounded-lg flex items-center justify-center h-16 ">
-                  <span className="text-2xl  text-black">28</span>
-                </div>
+                {renderCalendarDay(22, "February")}
+                {renderCalendarDay(23, "February")}
+                {renderCalendarDay(24, "February")}
+                {renderCalendarDay(25, "February")}
+                {renderCalendarDay(26, "February")}
+                {renderCalendarDay(27, "February")}
+                {renderCalendarDay(28, "February")}
               </div>
             </div>
           </div>
         </div>
+
+        {/* Calendar Event Modal */}
+        {selectedDate && (
+          <CalendarEventModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            date={selectedDate}
+            initialEventName={currentEvent?.eventName || ""}
+            onSave={handleSaveEvent}
+            isReadOnly={isReadOnly}
+          />
+        )}
       </section>
     </>
   );

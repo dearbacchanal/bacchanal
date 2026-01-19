@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useBookData } from "@/components/book/BookDataContext";
+import { useSession } from "next-auth/react";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 interface TextInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   fieldId: string;
@@ -16,6 +18,8 @@ export const TextInput: React.FC<TextInputProps> = ({
   ...props
 }) => {
   const { data, isReadOnly } = useBookData();
+  const { data: session } = useSession();
+  const { openModal } = useAuthModal();
   const [value, setValue] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
   const debouncedValue = useDebounce(value, 500);
@@ -81,12 +85,21 @@ export const TextInput: React.FC<TextInputProps> = ({
     saveValue();
   }, [debouncedValue, fieldId, isLoaded, onValueChange, isReadOnly]);
 
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (isReadOnly) return;
+    if (!session) {
+      e.target.blur();
+      openModal("signup");
+    }
+  };
+
   return (
     <input
       {...props}
       type="text"
       value={value}
       onChange={(e) => setValue(e.target.value)}
+      onFocus={handleFocus}
       className={className}
       readOnly={isReadOnly}
       disabled={isReadOnly}
