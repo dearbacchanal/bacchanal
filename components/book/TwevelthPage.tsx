@@ -2,11 +2,12 @@ import Image from "next/image";
 import { ImageBox } from "../ui/ImageBox";
 import { TextInput } from "../ui/TextInput";
 
+
 const TwelfthPage = () => {
   return (
     <>
       {/* Twelfth Page */}
-      <section className="relative min-h-screen w-full">
+      <section className="relative min-h-screen w-full overflow-hidden">
         <Image
           src="/assets/layer-16.png"
           alt="Overlay"
@@ -21,7 +22,7 @@ const TwelfthPage = () => {
               <h1 className="font-bold leading-none text-center">
                 {/* W */}
                 <span
-                  className="text-[#eeb33a] text-6xl sm:text-8xl lg:text-[130px]"
+                  className="text-[#eeb33a] text-6xl sm:text-8xl lg:text-[20vh]"
                   style={{
                     WebkitTextStroke: "2px white",
                   }}
@@ -30,11 +31,11 @@ const TwelfthPage = () => {
                 </span>
 
                 {/* E */}
-                <span className="text-3xl sm:text-4xl lg:text-6xl">E</span>
+                <span className="text-3xl sm:text-4xl lg:text-[10vh]">E</span>
 
                 {/* L */}
                 <span
-                  className="text-[#eeb33a] ms-4 sm:ms-6 lg:ms-10 inline-block text-6xl sm:text-8xl lg:text-[130px] rotate-[30deg]"
+                  className="text-[#eeb33a] ms-4 sm:ms-6 lg:ms-10 inline-block text-6xl sm:text-8xl lg:text-[20vh] rotate-[30deg]"
                   style={{
                     WebkitTextStroke: "2px white",
                   }}
@@ -43,10 +44,10 @@ const TwelfthPage = () => {
                 </span>
 
                 {/* imin */}
-                <span className="text-3xl sm:text-4xl lg:text-6xl">imin</span>
+                <span className="text-3xl sm:text-4xl lg:text-[10vh]">imin</span>
               </h1>
 
-              <p className="font-handwritten text-base sm:text-xl lg:text-3xl font-bold text-center mt-4 sm:mt-6">
+              <p className="font-handwritten text-base sm:text-xl lg:text-[4vh] font-bold text-center mt-4 sm:mt-6">
                 Tvinidadian slang (pronounced lime-in) means to hang out in
                 velaxed leisuvely manner, often with food, dvinks and music
                 without specific agenda.
@@ -55,10 +56,11 @@ const TwelfthPage = () => {
             <div className="w-full px-10 space-y-6">
               {/* Row 1 */}
               <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
-                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                <p className="text-sm sm:text-base lg:text-[2vh] whitespace-nowrap">
                   My drink of choice this Carnival:
                 </p>
                 <TextInput
+                  placeholder="Click to edit"
                   fieldId="drink-choice"
                   className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
@@ -66,10 +68,11 @@ const TwelfthPage = () => {
 
               {/* Row 2 */}
               <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
-                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                <p className="text-sm sm:text-base lg:text-[2vh] whitespace-nowrap">
                   Who I limed with the most:
                 </p>
                 <TextInput
+                  placeholder="Click to edit"
                   fieldId="limed-with"
                   className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
@@ -77,10 +80,11 @@ const TwelfthPage = () => {
 
               {/* Row 3 */}
               <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
-                <p className="text-sm sm:text-base lg:text-md whitespace-nowrap">
+                <p className="text-sm sm:text-base lg:text-[2vh] whitespace-nowrap">
                   I spent this epic time with:
                 </p>
                 <TextInput
+                  placeholder="Click to edit"
                   fieldId="spent-time-with"
                   className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
@@ -88,11 +92,12 @@ const TwelfthPage = () => {
 
               {/* Row 4 */}
               <div className="sm:grid grid-cols-[auto_1fr] gap-4 items-center">
-                <p className="text-sm sm:text-base lg:text-md">
+                <p className="text-sm sm:text-base lg:text-[2vh]">
                   The best part of Carnival I'll be telling stories about for
                   years:
                 </p>
                 <TextInput
+                  placeholder="Click to edit"
                   fieldId="best-part"
                   className="bg-transparent border-0 border-b-2 border-white text-white placeholder-white focus:outline-none focus:border-white w-full py-2 text-sm sm:text-base"
                 />
@@ -104,7 +109,8 @@ const TwelfthPage = () => {
               id="box-12-1"
               rotation="rotate-[0deg]"
               size="portrait-large"
-              placeholderText="Place Image"
+              placeholderText="Place image of you limin"
+              pageId="TwelfthPage"
             />
           </div>
         </div>

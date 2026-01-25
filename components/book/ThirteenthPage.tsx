@@ -37,8 +37,8 @@ const ThirteenthPage = () => {
           const response = await fetch('/api/book-data');
           if (response.ok) {
             const result = await response.json();
-            if (result.textData && result.textData['calendar-events']) {
-              const savedEvents = JSON.parse(result.textData['calendar-events']);
+            if (result.data && result.data['calendar-events']) {
+              const savedEvents = JSON.parse(result.data['calendar-events']);
               setEvents(savedEvents);
             }
           }
@@ -135,7 +135,7 @@ const ThirteenthPage = () => {
   return (
     <>
       {/* Thirteenth Page */}
-      <section className="min-h-screen relative w-full bg-[#009d94] p-8">
+      <section className="min-h-screen relative w-full bg-[#009d94] p-8 overflow-hidden">
         <Image
           src="/assets/layer-17.png"
           alt="Overlay"

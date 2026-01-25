@@ -92,7 +92,7 @@ export default function SharedBookPage({ params }: SharedBookPageProps) {
         <TenthPage key="page-2" />,
         <NinthPage key="page-3" />,
         <EleventhPage key="page-4" />,
-        <FifteenthPage key="page-4" />,
+        <FifteenthPage key="page-5" />,
         <TwevelthPage key="page-6" />,
         <Sponser key="page-7" />,
         <ThirteenthPage key="page-8" />,
@@ -106,10 +106,34 @@ export default function SharedBookPage({ params }: SharedBookPageProps) {
         <FirstPage key="page-16" />,
     ];
 
+    const boxData: Record<string, any> = {};
+    const dynamicBoxes: Record<string, string[]> = {};
+    if (bookData.textData) {
+        Object.keys(bookData.textData).forEach(key => {
+            if (key.startsWith('box-settings-')) {
+                const id = key.replace('box-settings-', '');
+                try {
+                    boxData[id] = JSON.parse(bookData.textData[key]);
+                } catch (e) {
+                    console.error("Error parsing box settings in shared provider:", e);
+                }
+            } else if (key.startsWith('dynamic-boxes-')) {
+                const pageId = key.replace('dynamic-boxes-', '');
+                try {
+                    dynamicBoxes[pageId] = JSON.parse(bookData.textData[key]);
+                } catch (e) {
+                    console.error("Error parsing dynamic boxes in shared provider:", e);
+                }
+            }
+        });
+    }
+
     return (
         <BookDataProvider
             textData={bookData.textData}
             images={bookData.images}
+            boxData={boxData}
+            dynamicBoxes={dynamicBoxes}
             isReadOnly={true}
         >
             <div className="w-full h-screen bg-gray-900 flex flex-col items-center justify-center">

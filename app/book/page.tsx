@@ -19,13 +19,72 @@ import { AuthModal } from "@/components/auth/AuthModal";
 import { BookFlip } from "@/components/book/BookFlip";
 import Sponser from "@/components/book/Sponser";
 
-const page = () => {
+import { BookDataProvider } from "@/components/book/BookDataContext";
+import { useEffect, useState } from "react";
+
+const BookPage = () => {
+  const [data, setData] = useState<{ textData: Record<string, string>; images: Record<string, string> }>({ textData: {}, images: {} });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [textRes, imgRes] = await Promise.all([
+          fetch("/api/book-data"),
+          fetch("/api/book-images")
+        ]);
+
+        const textResult = await textRes.json();
+        const imgResult = await imgRes.json();
+
+        const textData = textResult.data || {};
+        const boxData: Record<string, any> = {};
+        const dynamicBoxes: Record<string, string[]> = {};
+
+        // Extract box settings and dynamic boxes from textData
+        Object.keys(textData).forEach(key => {
+          if (key.startsWith('box-settings-')) {
+            const id = key.replace('box-settings-', '');
+            try {
+              boxData[id] = JSON.parse(textData[key]);
+            } catch (e) {
+              console.error("Error parsing box settings in provider:", e);
+            }
+          } else if (key.startsWith('dynamic-boxes-')) {
+            const pageId = key.replace('dynamic-boxes-', '');
+            try {
+              dynamicBoxes[pageId] = JSON.parse(textData[key]);
+            } catch (e) {
+              console.error("Error parsing dynamic boxes in provider:", e);
+            }
+          }
+        });
+
+        setData({
+          textData,
+          images: imgResult.images || {}
+        });
+        setBoxData(boxData);
+        setDynamicBoxes(dynamicBoxes);
+      } catch (error) {
+        console.error("Error fetching book data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [boxData, setBoxData] = useState<Record<string, any>>({});
+  const [dynamicBoxes, setDynamicBoxes] = useState<Record<string, string[]>>({});
+
   const pages = [
     <EigthPage key="page-1" />,
     <TenthPage key="page-2" />,
     <NinthPage key="page-3" />,
     <EleventhPage key="page-4" />,
-    <FifteenthPage key="page-4" />,
+    <FifteenthPage key="page-5" />,
     <TwevelthPage key="page-6" />,
     <Sponser key="page-7" />,
     <ThirteenthPage key="page-8" />,
@@ -40,14 +99,14 @@ const page = () => {
   ];
 
   return (
-    <>
+    <BookDataProvider textData={data.textData} images={data.images} boxData={boxData} dynamicBoxes={dynamicBoxes} isLoading={loading}>
       <BookFlip pages={pages} />
       <AuthModal />
-    </>
+    </BookDataProvider>
   );
 };
 
-export default page;
+export default BookPage;
 
 // const page = () => {
 //   return (
@@ -67,7 +126,7 @@ export default page;
 //       <ForthPage />
 //       <SecondPage />
 //       <ThirdPage />
-//       <FirstPage />
+//       <FirstPage />       
 
 //     </div>
 //   );

@@ -1,10 +1,9 @@
-import Index from '@/components/pages/home/Index'
-import React from 'react'
+import Homepage from '@/components/pages/home/Homepage'
 
 const page = () => {
   return (
     <div>
-      <Index/>
+      <Homepage/>
     </div>
   )
 }

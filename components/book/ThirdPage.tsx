@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import { kalufira } from "./Font";
 
 const ThirdPage = () => {
@@ -6,6 +7,7 @@ const ThirdPage = () => {
     <>
       {/* Third Page */}
       <section className="bg-[#d4602c] relative w-full min-h-screen">
+
         <Image
           src="/assets/layer-3.png"
           alt="Layer background"
@@ -61,6 +63,7 @@ const ThirdPage = () => {
             </p>
           </div>
         </div>
+
       </section>
     </>
   );

@@ -17,7 +17,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   className,
   ...props
 }) => {
-  const { data, isReadOnly } = useBookData();
+  const { data, isReadOnly, updateTextData } = useBookData();
   const { data: session } = useSession();
   const { openModal } = useAuthModal();
   const [value, setValue] = useState("");
@@ -76,6 +76,8 @@ export const TextInput: React.FC<TextInputProps> = ({
           }),
         });
 
+        // Update global context immediately
+        updateTextData(fieldId, debouncedValue);
         onValueChange?.(debouncedValue);
       } catch (error) {
         console.error("Error saving field value:", error);

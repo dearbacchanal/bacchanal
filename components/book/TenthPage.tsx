@@ -10,7 +10,7 @@ const kalam = Kalam({
 
 const TenthPage = () => {
   return (
-    <section className="relative w-full h-screen">
+    <section className="relative w-full h-screen overflow-hidden">
       <div className="flex flex-col md:flex-row w-full h-full relative z-10">
         {/* Left Section - Quote */}
         <div className="w-full md:w-1/2 bg-[#9F2E2B] flex items-center justify-center p-6 sm:p-8 md:p-8 relative h-1/2 md:h-full">
@@ -27,8 +27,7 @@ const TenthPage = () => {
             {/* Quote Text */}
             <TextArea
               fieldId="page10_quote"
-              placeholder="
-Me and carnival have a contract. Every year we go hard like nail. I on de roadway with truck bigger than hummingbird."
+              placeholder="Dear Bacchanal, you never warn us. You just show up. You take our sleep, our voices, our sense of time. You leave glitter in our bags and stories we can’t fully explain. This book is proof that we were there, that it happened, that we lived it."
               className="font-handwritten font-black placeholder:text-center text-black text-lg sm:text-xl md:text-3xl max-w-xl leading-relaxed bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-black/40 resize-none w-full"
               rows={5}
             />
@@ -55,7 +54,7 @@ Me and carnival have a contract. Every year we go hard like nail. I on de roadwa
             <TextInput
               fieldId="page10_message"
               placeholder="This is my Trinidad Carnival 2026."
-              className="font-handwritten font-black text-[#ce3834] text-2xl sm:text-3xl md:text-4xl bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-[#ce3834]/40 w-full"
+              className="font-handwritten font-black text-[#ce3834] text-2xl sm:text-3xl md:text-3xl bg-transparent border-none outline-none focus:outline-none focus:ring-0 placeholder:text-[#ce3834]/40 w-full"
             />
           </div>
 
