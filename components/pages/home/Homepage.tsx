@@ -2,8 +2,11 @@
 import { kalufira } from "@/components/book/Font";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuthModal } from "@/hooks/useAuthModal";
 
 const Homepage = () => {
+    const { openModal } = useAuthModal();
+  
   return (
     <>
       {/* section 1 */}
@@ -37,7 +40,7 @@ const Homepage = () => {
               drops
             </p>
 
-            <button className="mt-4 bg-[#ffde59] text-[#bf0000] px-10 sm:px-16 lg:px-20 py-4 rounded-full">
+            <button onClick={() => openModal("signup")} className="mt-4 bg-[#ffde59] text-[#bf0000] px-10 sm:px-16 lg:px-20 py-4 rounded-full">
               <h1 className="text-lg lg:text-2xl font-bold">
                 START THE BACCHANAL
               </h1>
@@ -80,7 +83,7 @@ const Homepage = () => {
 
         <div className="relative z-20 max-w-7xlpx-6 py-20">
           <h1 className="text-white text-center ps-10 text-5xl lg:text-7xl font-extrabold underline  mb-16">
-            WHAT IS DEAR BACCHANAL
+            WHAT IS DEAR BACCHANAL?
           </h1>
           <div className="flex py-20 justify-between items-center px-5 lg:px-20">
             <p className="text-2xl md:text-5xl lg:text-6xl text-center">
@@ -103,7 +106,7 @@ const Homepage = () => {
           alt="Background"
           fill
           priority
-          className="object-fit"
+          className="object-cover"
         />
 
         {/* Content */}
@@ -259,9 +262,11 @@ const Homepage = () => {
           </div>
         </div>
         <div className="flex justify-center items-center px-2 py-10">
+         <Link href="/book">
           <h1 className="text-2xl lg:text-5xl text-center bg-[#077786] text-white rounded-xl px-10 py-2">
             SOME MEMORIES DESERVER MORE THAN A SCROLL
           </h1>
+         </Link>
         </div>
       </section>
       {/* section 6 */}
@@ -397,6 +402,7 @@ const Homepage = () => {
           priority
         />
         <div className="flex justify-center items-center min-h-screen relative z-20 px-4 ">
+          <Link href="/book">
           <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[170px] max-w-8xl mx-auto text-[#be2826]">
             LET'S CREATE <br />
             SOME{" "}
@@ -406,6 +412,7 @@ const Homepage = () => {
             <br />
             BACCHANAL
           </h1>
+          </Link>
         </div>
       </section>
       {/* section 9 */}
