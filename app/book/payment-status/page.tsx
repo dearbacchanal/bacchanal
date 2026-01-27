@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 export default function PaymentStatusPage() {
   return (
@@ -17,7 +17,6 @@ export default function PaymentStatusPage() {
 
 function PaymentStatusContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const sessionId = searchParams.get("session_id");
   const canceled = searchParams.get("canceled");
 
@@ -43,10 +42,12 @@ function PaymentStatusContent() {
 
   useEffect(() => {
     if (status === "success" || status === "canceled") {
-      const timer = setTimeout(() => router.push("/book"), 3000);
+      const timer = setTimeout(() => {
+        window.location.href = "/book";
+      }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [status, router]);
+  }, [status]);
 
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "#000", color: "#fff" }}>
@@ -69,7 +70,7 @@ function PaymentStatusContent() {
               Something went wrong with your payment. Please try again.
             </p>
             <button
-              onClick={() => router.push("/book")}
+              onClick={() => { window.location.href = "/book"; }}
               style={{ marginTop: 20, padding: "10px 24px", background: "#fff", color: "#000", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 14 }}
             >
               Back to Book
