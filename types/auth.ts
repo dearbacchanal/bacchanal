@@ -7,6 +7,7 @@ export interface User {
   emailVerified?: Date | null;
   createdAt?: Date;
   updatedAt?: Date;
+  isPurchased?: boolean;
 }
 
 export interface AuthModalState {

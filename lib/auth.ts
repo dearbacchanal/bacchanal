@@ -123,16 +123,20 @@ export const authConfig: NextAuthConfig = {
         token.provider = user.provider || (account?.provider === "google" ? "google" : "credentials");
       }
 
-      // For Google OAuth, get the user ID from database
-      if (account?.provider === "google" && user.email) {
+      // Get user ID and purchase status from database
+      const email = user?.email || token?.email;
+      if (email) {
         try {
           const db = await getDatabase();
           const usersCollection = db.collection("users");
-          const dbUser = await usersCollection.findOne({ email: user.email });
+          const dbUser = await usersCollection.findOne({ email });
 
           if (dbUser) {
             token.id = dbUser._id.toString();
-            token.provider = "google";
+            token.isPurchased = !!dbUser.isPurchased;
+            if (account?.provider === "google") {
+              token.provider = "google";
+            }
           }
         } catch (error) {
           console.error("JWT callback error:", error);
@@ -142,10 +146,11 @@ export const authConfig: NextAuthConfig = {
       return token;
     },
     async session({ session, token }) {
-      // Add user id and provider to session
+      // Add user id and provider and purchase status to session
       if (session.user) {
         session.user.id = token.id as string;
         session.user.provider = token.provider as "credentials" | "google";
+        session.user.isPurchased = token.isPurchased as boolean;
       }
 
       return session;

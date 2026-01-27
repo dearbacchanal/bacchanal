@@ -6,6 +6,7 @@ declare module "next-auth" {
     user: {
       id: string;
       provider: "credentials" | "google";
+      isPurchased?: boolean;
     } & DefaultSession["user"];
   }
 
@@ -18,5 +19,6 @@ declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
     id: string;
     provider: "credentials" | "google";
+    isPurchased?: boolean;
   }
 }
