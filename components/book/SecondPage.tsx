@@ -26,7 +26,7 @@ const SecondPage = () => {
           alt="Background"
           fill
           priority
-          className="object-cover -z-10"
+          className="object-cover z-0"
         />
         <Image
           src="/assets/PawPaw.png"

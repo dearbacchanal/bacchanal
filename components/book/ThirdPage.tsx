@@ -13,7 +13,7 @@ const ThirdPage = () => {
           alt="Layer background"
           width={900}
           height={300}
-          className="absolute object-contain bottom-0 right-0 w-64 sm:w-96 lg:w-[900px]"
+          className="absolute object-contain bottom-0 right-0 w-40 sm:w-96 lg:w-[900px]"
           priority
         />
         <div className="flex flex-col xl:flex-row justify-between items-start z-10 relative px-4 sm:px-8 lg:px-0">
@@ -26,7 +26,7 @@ const ThirdPage = () => {
                 CARNIVAL
               </span>
             </h1>
-            <p className="text-white text-base sm:text-lg lg:text-xl mt-6 lg:mt-10">
+            <p className="text-white text-lg sm:text-lg lg:text-xl mt-6 lg:mt-10">
               Long before music trucks, glittering costumes, and iconic stage
               crossings, Carnival in Trinidad and Tobago was shaped by a people
               determined to express their freedom. Its earliest roots trace back
@@ -53,7 +53,7 @@ const ThirdPage = () => {
               the sun hits the road and the music rises, we reenact that story
               all over again.
             </p>
-            <p className="text-white text-base sm:text-lg lg:text-xl mt-6 lg:mt-10">
+            <p className="text-white text-lg sm:text-lg lg:text-xl mt-6 lg:mt-10">
               With Emancipation, those street celebrations erupted into a
               powerful public declaration of liberty our liberty. From that
               moment on, Carnival became the heartbeat of a nation that refused

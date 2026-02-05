@@ -78,7 +78,7 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
   }, [currentPage, isAnimating]);
 
   return (
-    <div className="relative w-full h-screen bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 overflow-hidden">
+    <div className="relative w-full h-[100dvh] bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 overflow-hidden">
       {/* Ambient background effects */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" />
@@ -157,6 +157,7 @@ export const BookFlip: React.FC<BookFlipProps> = ({ pages }) => {
             </span>
           </div>
         </div>
+
         <Link
           href="/"
           className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 md:px-6 md:py-2.5 lg:px-8 lg:py-3 shadow-2xl hover:bg-white/20 transition-all duration-300"

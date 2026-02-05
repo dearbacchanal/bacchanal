@@ -11,7 +11,7 @@ const FourteenPage = () => {
     <>
       {/* Fourteen Page */}
       <section className="w-full min-h-screen flex flex-col xl:flex-row overflow-hidden relative">
-    
+
         <Image
           src="/assets/layer-18.png"
           alt="Overlay"
@@ -20,7 +20,7 @@ const FourteenPage = () => {
           className="object-cover  lg:min-w-[50%] h-auto  absolute pointer-events-none z-10 hidden lg:block"
           priority
         />
-        <div className="w-full xl:w-1/2 bg-[#bfbf40] relative overflow-hidden min-h-[50vh] lg:min-h-screen flex items-center justify-center lg:block lg:pt-20">
+        <div className="w-full xl:w-1/2 bg-[#bfbf40] relative overflow-hidden min-h-[50vh] h-auto lg:h-auto lg:min-h-screen flex items-center justify-center lg:block lg:pt-20">
           <div className="py-10 lg:py-0 relative" >
             <h1
               className={`${kalufira.className} text-black text-5xl sm:text-7xl lg:text-[10vw] relative lg:top-[10vw] rotate-[-10deg] text-center lg:text-left px-4 lg:px-0`}
@@ -43,7 +43,7 @@ const FourteenPage = () => {
             </div>
           </div>
         </div>
-        <div className="w-full xl:w-1/2 bg-[#fbdc36] flex justify-start px-4 sm:px-6 lg:pl-10 items-center relative overflow-hidden min-h-[50vh] lg:min-h-screen py-10 lg:py-0">
+        <div className="w-full xl:w-1/2 bg-[#fbdc36] flex justify-start px-4 sm:px-6 lg:pl-10 items-center relative overflow-hidden min-h-[50vh] h-auto lg:h-auto lg:min-h-screen py-10 lg:py-0">
           <Image
             src="/assets/layer-19.png"
             alt="Overlay"

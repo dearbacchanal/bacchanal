@@ -34,7 +34,7 @@ const FifteenthPage = () => {
           alt="Overlay"
           width={300}
           height={200}
-          className="object-cover top-2 sm:top-4 lg:top-5 left-4 sm:left-6 lg:left-10 absolute pointer-events-none w-32 sm:w-48 lg:min-w-[30%] h-auto"
+          className="object-cover top-2 sm:top-4 lg:top-5 left-4 sm:left-6 lg:left-10 absolute pointer-events-none w-48 sm:w-48 lg:min-w-[30%] h-auto"
           priority
         />
         <Image
@@ -42,7 +42,7 @@ const FifteenthPage = () => {
           alt="Overlay"
           width={300}
           height={200}
-          className="object-cover bottom-0 left-0 absolute pointer-events-none w-32 sm:w-48 lg:min-w-[20%] h-auto"
+          className="object-cover bottom-0 left-0 absolute pointer-events-none w-48 sm:w-48 lg:min-w-[20%] h-auto"
           priority
         />
         <Image
@@ -50,7 +50,7 @@ const FifteenthPage = () => {
           alt="Overlay"
           width={300}
           height={200}
-          className="object-cover bottom-0 right-0 absolute pointer-events-none w-32 sm:w-48 lg:min-w-[20%] h-auto"
+          className="object-cover bottom-0 right-0 absolute pointer-events-none w-48 sm:w-48 lg:min-w-[20%] h-auto"
           priority
         />
 

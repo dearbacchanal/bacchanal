@@ -10,11 +10,13 @@ import { signUpSchema, SignUpInput } from "@/lib/validators";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const { toggleView, closeModal } = useAuthModal();
+  const router = useRouter();
 
   const {
     register,
@@ -60,6 +62,7 @@ export function SignUpForm() {
       }
 
       closeModal();
+      router.push("/book");
     } catch (error) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -70,9 +73,8 @@ export function SignUpForm() {
   const handleGoogleSignUp = async () => {
     try {
       setIsGoogleLoading(true);
-      // Redirect back to the current page after Google sign-up
-      const currentUrl = window.location.href;
-      await signIn("google", { callbackUrl: currentUrl });
+      // Redirect to /book after Google sign-up
+      await signIn("google", { callbackUrl: "/book" });
     } catch (error) {
       toast.error("Failed to sign up with Google");
       setIsGoogleLoading(false);

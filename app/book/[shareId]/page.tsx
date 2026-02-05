@@ -87,7 +87,8 @@ export default function SharedBookPage({ params }: SharedBookPageProps) {
 
     if (!bookData) return null;
 
-    const pages = [
+    // Pages for PDF generation (without download button to avoid circular reference)
+    const pagesForPDF = [
         <EigthPage key="page-1" />,
         <TenthPage key="page-2" />,
         <NinthPage key="page-3" />,
@@ -104,6 +105,26 @@ export default function SharedBookPage({ params }: SharedBookPageProps) {
         <SecondPage key="page-14" />,
         <ThirdPage key="page-15" />,
         <FirstPage key="page-16" />,
+    ];
+
+    // Display pages with download button on last page
+    const pages = [
+        <EigthPage key="page-1" />,
+        <TenthPage key="page-2" />,
+        <NinthPage key="page-3" />,
+        <EleventhPage key="page-4" />,
+        <FifteenthPage key="page-5" />,
+        <TwevelthPage key="page-6" />,
+        <Sponser key="page-7" />,
+        <ThirteenthPage key="page-8" />,
+        <ForteenPage key="page-9" />,
+        <FifthPage key="page-10" />,
+        <SixthPage key="page-11" />,
+        <SeventhPage key="page-12" />,
+        <ForthPage key="page-13" />,
+        <SecondPage key="page-14" />,
+        <ThirdPage key="page-15" />,
+        <FirstPage key="page-16" pages={pagesForPDF} />,
     ];
 
     const boxData: Record<string, any> = {};

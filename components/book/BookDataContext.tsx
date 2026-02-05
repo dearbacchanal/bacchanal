@@ -15,16 +15,20 @@ interface BookDataContextType {
   isLoading: boolean;
   updateBoxData: (id: string, settings: { width?: number; height?: number; isVisible?: boolean; rotation?: number; x?: number; y?: number }) => void;
   updateTextData: (id: string, value: string) => void;
+  updateImage: (id: string, url: string | null) => void;
   addDynamicBox: (pageId: string) => void;
   removeDynamicBox: (pageId: string, boxId: string) => void;
+  isPDF?: boolean;
 }
 
 const BookDataContext = createContext<BookDataContextType>({
   data: { textData: {}, images: {}, boxData: {}, dynamicBoxes: {} },
   isReadOnly: false,
   isLoading: false,
+  isPDF: false,
   updateBoxData: () => { },
   updateTextData: () => { },
+  updateImage: () => { },
   addDynamicBox: () => { },
   removeDynamicBox: () => { },
 });
@@ -39,18 +43,21 @@ interface BookDataProviderProps {
   dynamicBoxes?: Record<string, string[]>;
   isReadOnly?: boolean;
   isLoading?: boolean;
+  isPDF?: boolean;
 }
 
 export const BookDataProvider: React.FC<BookDataProviderProps> = ({
   children,
   textData: initialTextData = {},
-  images = {},
+  images: initialImages = {},
   boxData: initialBoxData = {},
   dynamicBoxes: initialDynamicBoxes = {},
   isReadOnly = false,
   isLoading = false,
+  isPDF = false,
 }) => {
   const [textData, setTextData] = React.useState(initialTextData);
+  const [images, setImages] = React.useState(initialImages);
   const [boxData, setBoxData] = React.useState(initialBoxData);
   const [dynamicBoxes, setDynamicBoxes] = React.useState(initialDynamicBoxes);
 
@@ -58,6 +65,10 @@ export const BookDataProvider: React.FC<BookDataProviderProps> = ({
   React.useEffect(() => {
     setTextData(initialTextData);
   }, [initialTextData]);
+
+  React.useEffect(() => {
+    setImages(initialImages);
+  }, [initialImages]);
 
   React.useEffect(() => {
     setBoxData(initialBoxData);
@@ -79,6 +90,17 @@ export const BookDataProvider: React.FC<BookDataProviderProps> = ({
       ...prev,
       [id]: value
     }));
+  };
+
+  const updateImage = (id: string, url: string | null) => {
+    setImages(prev => {
+      if (url === null) {
+        const newImages = { ...prev };
+        delete newImages[id];
+        return newImages;
+      }
+      return { ...prev, [id]: url };
+    });
   };
 
   const addDynamicBox = async (pageId: string) => {
@@ -156,8 +178,10 @@ export const BookDataProvider: React.FC<BookDataProviderProps> = ({
         isLoading,
         updateBoxData,
         updateTextData,
+        updateImage,
         addDynamicBox,
         removeDynamicBox,
+        isPDF: isPDF || false,
       }}
     >
       {children}

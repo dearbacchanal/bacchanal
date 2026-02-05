@@ -10,10 +10,10 @@ const kalam = Kalam({
 
 const TenthPage = () => {
   return (
-    <section className="relative w-full h-screen overflow-hidden">
+    <section className="relative w-full min-h-screen h-full overflow-hidden">
       <div className="flex flex-col md:flex-row w-full h-full relative z-10">
         {/* Left Section - Quote */}
-        <div className="w-full md:w-1/2 bg-[#9F2E2B] flex items-center justify-center p-6 sm:p-8 md:p-8 relative h-1/2 md:h-full">
+        <div className="w-full md:w-1/2 bg-[#9F2E2B] flex items-center justify-center p-6 sm:p-8 md:p-8 relative min-h-[50vh] h-auto md:h-full">
           <div className="relative w-full max-w-xl px-4">
             {/* Left Quote Mark - Hidden on mobile */}
             <div className="relative hidden md:block">
@@ -44,7 +44,7 @@ const TenthPage = () => {
         </div>
 
         {/* Right Section - Letter */}
-        <div className="w-full md:w-1/2 bg-white flex flex-col items-center relative justify-center p-6 sm:p-8 md:p-8 h-1/2 md:h-full">
+        <div className="w-full md:w-1/2 bg-white flex flex-col items-center relative justify-center p-6 sm:p-8 md:p-8 min-h-[50vh] h-auto md:h-full">
           <div className="max-w-sm mx-auto md:mx-0">
             <TextInput
               fieldId="page10_greeting"

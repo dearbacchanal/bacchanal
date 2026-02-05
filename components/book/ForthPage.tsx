@@ -106,7 +106,7 @@ const ForthPage = () => {
     <>
       {/* Fourth page */}
       <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col xl:flex-row">
-    
+
         <div className="w-full lg:w-1/2 pt-8 sm:pt-12 lg:pt-16 px-6 sm:px-8 lg:pl-10">
           <h1 className={`${kalufira.className} text-5xl sm:text-7xl lg:text-[30vh] leading-tight sm:leading-tight lg:leading-[25vh]`}>
             <span className="">TELL</span>
@@ -123,7 +123,7 @@ const ForthPage = () => {
             alt="Layer background"
             width={250}
             height={250}
-            className="absolute object-contain lg:top-[-50px]  left-0 w-32 sm:w-40 lg:min-w-[25%] h-32 sm:h-40 lg:min-h-[25%]"
+            className="absolute object-contain lg:top-[-50px]  left-0 w-20 sm:w-40 lg:min-w-[25%] h-20 sm:h-40 lg:min-h-[25%]"
             priority
           />
           <Image
@@ -131,7 +131,7 @@ const ForthPage = () => {
             alt="Layer background"
             width={250}
             height={250}
-            className="absolute object-contain top-10 right-4 sm:right-6 lg:right-10 w-32 sm:w-40 lg:min-w-[25%] h-32 sm:h-40 lg:min-h-[25%]"
+            className="absolute object-contain top-10 right-4 sm:right-6 lg:right-10 w-20 sm:w-40 lg:min-w-[25%] h-20 sm:h-40 lg:min-h-[25%]"
             priority
           />
           <Image
@@ -139,14 +139,14 @@ const ForthPage = () => {
             alt="Layer background"
             width={200}
             height={200}
-            className="absolute object-contain bottom-0 right-0 w-24 sm:w-32 lg:min-w-[25%] h-24 sm:h-32 lg:min-h-[25%]"
+            className="absolute object-contain bottom-0 right-0 w-16 sm:w-32 lg:min-w-[25%] h-16 sm:h-32 lg:min-h-[25%]"
             priority
           />
           <div className="mt-10 sm:mt-28 lg:mt-36 relative z-10">
             {triniItems.map((item, index) => (
               <div
                 key={index}
-                className={`text-sm sm:text-base lg:text-[3vh] mb-2 sm:mb-2.5 lg:mb-4 flex items-start gap-2 ${!isReadOnly ? 'cursor-pointer hover:opacity-80' : ''}`}
+                className={`text-lg sm:text-base lg:text-[3vh] mb-2 sm:mb-2.5 lg:mb-4 flex items-start gap-2 ${!isReadOnly ? 'cursor-pointer hover:opacity-80' : ''}`}
                 onClick={() => handleCheckboxChange(item)}
               >
                 <span className="flex-shrink-0 select-none">

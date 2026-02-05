@@ -20,7 +20,7 @@ const FifthPage = () => {
             <Plus className="w-5 h-5" />
           </button>
         )}
-        <div className="w-full xl:w-1/2 bg-[#fbba00] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] xl:min-h-screen">
+        <div className="w-full xl:w-1/2 bg-[#fbba00] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] h-auto xl:min-h-screen pb-20 xl:pb-0">
           <Image
             src="/assets/layer-9.png"
             alt="Layer background"
@@ -45,7 +45,7 @@ const FifthPage = () => {
             CULTUAL <span className="block">EVENTS</span>
           </h1>
         </div>
-        <div className="w-full xl:w-1/2 bg-[#143951] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] xl:min-h-screen">
+        <div className="w-full xl:w-1/2 bg-[#143951] relative flex justify-center pt-8 sm:pt-10 lg:pt-14 min-h-[50vh] h-auto xl:min-h-screen pb-20 xl:pb-0">
           {/* Overlay Image */}
           <Image
             src="/assets/layer-7.png"

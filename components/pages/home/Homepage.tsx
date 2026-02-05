@@ -3,14 +3,26 @@ import { kalufira } from "@/components/book/Font";
 import Image from "next/image";
 import Link from "next/link";
 import { useAuthModal } from "@/hooks/useAuthModal";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
 
 const Homepage = () => {
-    const { openModal } = useAuthModal();
-  
+  const { openModal } = useAuthModal();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  const handleAction = () => {
+    if (isAuthenticated) {
+      router.push("/book");
+    } else {
+      openModal("signup");
+    }
+  };
+
   return (
     <>
       {/* section 1 */}
-      <section className="bg-[#e09b2c] pt-32 sm:pt-0 min-h-screen w-full overflow-hidden">
+      <section className="bg-[#e09b2c] pt-32 sm:pt-0 min-h-screen w-full overflow-hidden relative">
         <div className="flex flex-col lg:flex-row w-full min-h-screen relative">
           {/* LEFT CONTENT */}
           <div
@@ -40,7 +52,7 @@ const Homepage = () => {
               drops
             </p>
 
-            <button onClick={() => openModal("signup")} className="mt-4 bg-[#ffde59] text-[#bf0000] px-10 sm:px-16 lg:px-20 py-4 rounded-full">
+            <button onClick={handleAction} className="mt-4 bg-[#ffde59] text-[#bf0000] px-10 sm:px-16 lg:px-20 py-4 rounded-full">
               <h1 className="text-lg lg:text-2xl font-bold">
                 START THE BACCHANAL
               </h1>
@@ -67,6 +79,19 @@ const Homepage = () => {
               className="object-contain lg:object-cover"
             />
           </div>
+
+
+        </div>
+        {/* Sponsor Banner */}
+        <div className="hidden lg:block lg:absolute bottom-3 left-40 flex justify-center">
+          <Image
+            src="/assets/full-banner.jpeg"
+            alt="Sponsored by Crix & Carnival - The Perfect Pair"
+            width={640}
+            height={93}
+            className="w-full max-w-2xl h-auto rounded-lg shadow-2xl"
+            priority
+          />
         </div>
       </section>
       {/* section 2 */}
@@ -262,11 +287,11 @@ const Homepage = () => {
           </div>
         </div>
         <div className="flex justify-center items-center px-2 py-10">
-         <Link href="/book">
-          <h1 className="text-2xl lg:text-5xl text-center bg-[#077786] text-white rounded-xl px-10 py-2">
-            SOME MEMORIES DESERVER MORE THAN A SCROLL
-          </h1>
-         </Link>
+          <Link href="/book">
+            <h1 className="text-2xl lg:text-5xl text-center bg-[#077786] text-white rounded-xl px-10 py-2">
+              SOME MEMORIES DESERVER MORE THAN A SCROLL
+            </h1>
+          </Link>
         </div>
       </section>
       {/* section 6 */}
@@ -403,15 +428,15 @@ const Homepage = () => {
         />
         <div className="flex justify-center items-center min-h-screen relative z-20 px-4 ">
           <Link href="/book">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[170px] max-w-8xl mx-auto text-[#be2826]">
-            LET'S CREATE <br />
-            SOME{" "}
-            <span className="inline-block max-w-[400px] text-xl sm:text-2xl lg:text-4xl bg-[#be2826] text-[#ecb52b] px-6 sm:px-8 md:px-10 py-3 sm:py-5 md:py-7 rounded-full mt-4">
-              CUSTOMISE YOUR BOOK NOW
-            </span>
-            <br />
-            BACCHANAL
-          </h1>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[170px] max-w-8xl mx-auto text-[#be2826]">
+              LET'S CREATE <br />
+              SOME{" "}
+              <span className="inline-block max-w-[400px] text-xl sm:text-2xl lg:text-4xl bg-[#be2826] text-[#ecb52b] px-6 sm:px-8 md:px-10 py-3 sm:py-5 md:py-7 rounded-full mt-4">
+                CUSTOMISE YOUR BOOK NOW
+              </span>
+              <br />
+              BACCHANAL
+            </h1>
           </Link>
         </div>
       </section>

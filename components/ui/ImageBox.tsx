@@ -29,7 +29,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
   className = "",
   pageId
 }) => {
-  const { data, isReadOnly, updateBoxData, addDynamicBox } = useBookData();
+  const { data, isReadOnly, updateBoxData, updateImage, addDynamicBox, isPDF } = useBookData();
   const { data: session } = useSession();
   const { openModal } = useAuthModal();
   const [image, setImage] = useState<string | null>(null);
@@ -67,6 +67,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
 
           if (response.ok) {
             setImage(uploadedUrl);
+            updateImage(id, uploadedUrl); // Sync with context for PDF generation
             toast.success("Image uploaded successfully!");
           } else {
             throw new Error("Failed to save image URL");
@@ -179,12 +180,17 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // Match tailwind 'md' breakpoint
+      // If we are generating a PDF, we want to force desktop layout
+      if (isPDF) {
+        setIsMobile(false);
+        return;
+      }
+      setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [isPDF]);
 
   // Determine if we should use absolute positioning
   // Dynamic boxes (from DynamicBoxRenderer) pass 'absolute' or 'md:absolute'
@@ -265,6 +271,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
       });
       if (response.ok) {
         setImage(null);
+        updateImage(id, null); // Sync with context
         toast.success("Image deleted successfully!");
       } else {
         throw new Error("Failed to delete image");
@@ -285,10 +292,10 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
 
   // Drag Handling
   const startDragging = (e: React.MouseEvent) => {
-      const target = e.target as HTMLElement;
+    const target = e.target as HTMLElement;
 
-     // Ignore drag if clicked on a button, svg, or input
-  if (target.closest('button, input, svg')) return;
+    // Ignore drag if clicked on a button, svg, or input
+    if (target.closest('button, input, svg')) return;
     if (isReadOnly || isResizing || isRotating) return;
     e.stopPropagation();
     e.preventDefault();
@@ -412,6 +419,30 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
   };
 
   const getSizeClasses = () => {
+    // For PDF generation, use fixed pixel values based on 1920px width
+    // This ensures consistent sizing regardless of actual viewport
+    if (isPDF) {
+      switch (size) {
+        case "large":
+          return { box: "h-[269px] w-[269px]", bar: "w-[269px]" }; // 14vw of 1920
+        case "xlarge":
+          return { box: "h-[346px] w-[346px]", bar: "w-[346px]" }; // 18vw of 1920
+        case "horizontal":
+          return { box: "h-[346px] w-[730px]", bar: "w-[730px]" }; // 18vw x 38vw
+        case "vertical":
+          return { box: "h-[288px] w-[250px]", bar: "w-[250px]" }; // 15vw x 13vw
+        case "tall-vertical":
+          return { box: "h-[730px] w-[346px]", bar: "w-[346px]" }; // 38vw x 18vw
+        case "portrait":
+          return { box: "w-[211px] h-[269px]", bar: "w-[211px]" }; // 11vw x 14vw
+        case "portrait-large":
+          return { box: "w-[403px] h-[538px]", bar: "w-[403px]" }; // 21vw x 28vw
+        default:
+          return { box: "h-[211px] w-[211px]", bar: "w-[211px]" }; // 11vw of 1920
+      }
+    }
+
+    // Normal responsive classes for regular view
     switch (size) {
       case "large":
         return {
@@ -477,7 +508,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
           }}
         >
           <div className={boxSizeClasses}></div>
-          {showWhiteBar && <div className="h-[12px] sm:h-[16px] lg:h-[20px]"></div>}
+          {showWhiteBar && <div className={isPDF ? "h-[20px]" : "h-[12px] sm:h-[16px] lg:h-[20px]"}></div>}
         </div>
       )}
 
@@ -486,8 +517,8 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
         className={`${className} group select-none transition-shadow`}
         style={{
           ...baseStyle,
-          maxWidth: isMobile ? '90vw' : undefined,
-          maxHeight: isMobile ? '80vh' : undefined,
+          maxWidth: (isMobile && !isPDF) ? '90vw' : undefined,
+          maxHeight: (isMobile && !isPDF) ? '80vh' : undefined,
         }}
       >
         <div
@@ -586,7 +617,7 @@ export const ImageBox: React.FC<ImageBoxProps> = ({
 
         {/* White Bar with Remove Button */}
         {showWhiteBar && (
-          <div className={`bg-white ${dimensions.width ? 'w-full' : whiteBarSizeClasses} h-[12px] sm:h-[16px] lg:h-[20px] relative overflow-visible`}>
+          <div className={`bg-white ${dimensions.width ? 'w-full' : whiteBarSizeClasses} ${isPDF ? 'h-[20px]' : 'h-[12px] sm:h-[16px] lg:h-[20px]'} relative overflow-visible`}>
             {!isReadOnly && (
               <button
                 onClick={(e) => { e.stopPropagation(); setIsRemoveModalOpen(true); }}

@@ -14,6 +14,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { PaymentModal } from "./PaymentModal";
 
 interface SaveBookModalProps {
   isOpen: boolean;
@@ -30,6 +32,9 @@ export function SaveBookModal({ isOpen, onClose, onOpen, onSaveSuccess }: SaveBo
   const { isAuthenticated, isLoading } = useAuth();
   const { openModal } = useAuthModal();
   const router = useRouter();
+  const { data: session } = useSession();
+  const isPurchased = session?.user?.isPurchased;
+  const [showPayment, setShowPayment] = useState(false);
   const previousAuthState = useRef(isAuthenticated);
 
   // ... existing effects ...
@@ -71,6 +76,13 @@ export function SaveBookModal({ isOpen, onClose, onOpen, onSaveSuccess }: SaveBo
       setWaitingForAuth(true);
       onClose(); // Close the save modal
       openModal("signup"); // Open auth modal
+      return;
+    }
+
+    // Check if user has purchased
+    if (!isPurchased) {
+      onClose(); // Close the save modal first
+      setShowPayment(true);
       return;
     }
 
@@ -128,50 +140,54 @@ export function SaveBookModal({ isOpen, onClose, onOpen, onSaveSuccess }: SaveBo
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Save Your Carnival Book</DialogTitle>
-          <DialogDescription>
-            Give your book a name and save it to your templates
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save Your Carnival Book</DialogTitle>
+            <DialogDescription>
+              Give your book a name and save it to your templates
+            </DialogDescription>
+          </DialogHeader>
 
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="bookName">Book Name</Label>
-            <Input
-              id="bookName"
-              placeholder="e.g., Trinidad Carnival 2026"
-              value={bookName}
-              onChange={(e) => setBookName(e.target.value)}
-              disabled={isSaving}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !isSaving) {
-                  handleSave();
-                }
-              }}
-            />
+          <div className="space-y-4  p-4">
+            <div className="space-y-2">
+              <Label htmlFor="bookName">Book Name</Label>
+              <Input
+                id="bookName"
+                placeholder="e.g., Trinidad Carnival 2026"
+                value={bookName}
+                onChange={(e) => setBookName(e.target.value)}
+                disabled={isSaving}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !isSaving) {
+                    handleSave();
+                  }
+                }}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="flex gap-3 justify-end">
-          <button
-            onClick={onClose}
-            disabled={isSaving}
-            className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors duration-200 disabled:opacity-50"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleSave}
-            disabled={isSaving || !bookName.trim()}
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-coral via-teal to-yellow text-white font-semibold hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-          >
-            {isSaving ? "Saving..." : "Save Book"}
-          </button>
-        </div>
-      </DialogContent>
-    </Dialog>
+          <div className="flex gap-3 justify-end">
+            <button
+              onClick={onClose}
+              disabled={isSaving}
+              className="px-4 py-2 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors duration-200 disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving || !bookName.trim()}
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-coral via-teal to-yellow text-white font-semibold hover:opacity-90 transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isSaving ? "Saving..." : "Save Book"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <PaymentModal isOpen={showPayment} onClose={() => setShowPayment(false)} />
+    </>
   );
 }
