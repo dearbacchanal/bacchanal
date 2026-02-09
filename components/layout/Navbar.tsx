@@ -30,10 +30,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0  left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-black/60 backdrop-blur-md m-2 md:m-5 rounded-xl "
-          : "bg-black/40 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-xl"
+          ? "bg-black/60 backdrop-blur-md m-2 md:m-5 rounded-xl  "
+          : "bg-black/40 backdrop-blur-sm lg:bg-transparent lg:backdrop-blur-none rounded-xl top-8 "
       }`}
     >
       <div className="container mx-auto px-4">

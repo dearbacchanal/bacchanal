@@ -18,6 +18,9 @@ export default function ConditionalLayout({
 
   return (
     <>
+      <div className="bg-gradient-to-r from-pink-600 via-red-500 to-yellow-500  text-white text-center py-2 px-4 text-sm font-medium tracking-wide">
+        Use code <span className="font-bold">BACCHANAL10</span> to get 10% off! Active from Sunday 8th Feb
+      </div>
       <Navbar />
       {children}
       <Footer />
