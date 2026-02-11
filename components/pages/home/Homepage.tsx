@@ -22,7 +22,7 @@ const Homepage = () => {
   return (
     <>
       {/* section 1 */}
-      <section className="bg-[#e09b2c] pt-32 sm:pt-0 min-h-screen w-full overflow-hidden relative">
+      <section className="bg-[#e09b2c] pt-32 lg:pt-0 min-h-screen w-full overflow-hidden relative">
         <div className="flex flex-col lg:flex-row w-full min-h-screen relative">
           {/* LEFT CONTENT */}
           <div
@@ -68,7 +68,7 @@ const Homepage = () => {
           <div
             className="
             relative w-full h-[280px] sm:h-[380px]
-            lg:absolute lg:right-0 lg:bottom-0 lg:w-[50%] lg:min-h-[100%]
+            lg:absolute lg:right-0 bottom-20 sm:bottom-0 lg:w-[50%] lg:min-h-[100%]
           "
           >
             <Image
@@ -83,13 +83,13 @@ const Homepage = () => {
 
         </div>
         {/* Sponsor Banner */}
-        <div className="hidden lg:block lg:absolute bottom-3 left-40 flex justify-center">
+        <div className="absolute bottom-0 w-full lg:max-w-2xl lg:left-40 flex justify-center">
           <Image
             src="/assets/full-banner.jpeg"
             alt="Sponsored by Crix & Carnival - The Perfect Pair"
             width={640}
             height={93}
-            className="w-full max-w-2xl h-auto rounded-lg shadow-2xl"
+            className="w-full lg:max-w-2xl h-auto rounded-lg shadow-2xl"
             priority
           />
         </div>

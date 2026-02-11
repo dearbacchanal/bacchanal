@@ -46,6 +46,7 @@ const SeventhPage = () => {
             </div>
             <div className="flex gap-4 sm:gap-6 lg:gap-10 mt-6 sm:mt-8 lg:mt-10 flex-wrap justify-center lg:justify-start">
               <ImageBox id="box-7-right-3" rotation="rotate-[5deg]" size="xlarge" pageId="SeventhPage" />
+              <ImageBox id="box-7-right-3" rotation="rotate-[5deg]" size="xlarge" pageId="SeventhPage" />
             </div>
           </div>
         </div>

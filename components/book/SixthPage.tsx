@@ -32,28 +32,29 @@ const SixthPage = () => {
           <div className="relative w-full xl:w-1/2 min-h-screen xl:min-h-[600px] flex flex-col gap-8 lg:block py-10 lg:py-0 items-center">
             {/* Box 1 - Horizontal */}
             <div className="relative lg:absolute lg:left-[6vw] lg:top-0">
-              <ImageBox id="box-6-left-1" rotation="rotate-[-3deg]" size="horizontal" showWhiteBar={false} pageId="SixthPage" />
+              <ImageBox id="box-6-left-1" rotation="rotate-[-3deg]" size="horizontal"  pageId="SixthPage" />
             </div>
             {/* Box 2 - Vertical Left */}
             <div className="relative lg:absolute lg:top-[22vw] lg:left-[6vw]">
-              <ImageBox id="box-6-left-2" rotation="rotate-[-3deg]" size="vertical" showWhiteBar={false} pageId="SixthPage" />
+              <ImageBox id="box-6-left-2" rotation="rotate-[-3deg]" size="vertical"  pageId="SixthPage" />
             </div>
             {/* Box 3 - Vertical Right */}
             <div className="relative lg:absolute lg:top-[22vw] lg:right-[11vw]">
-              <ImageBox id="box-6-left-3" rotation="rotate-[6deg]" size="vertical" showWhiteBar={false} pageId="SixthPage" />
+              <ImageBox id="box-6-left-3" rotation="rotate-[6deg]" size="vertical"  pageId="SixthPage" />
             </div>
           </div>
           <div className="relative w-full xl:w-1/2 min-h-screen xl:min-h-[600px] flex flex-col gap-8 lg:block py-10 lg:py-0 items-center">
             {/* Box 1 - Tall Vertical */}
             <div className="relative lg:absolute lg:left-[6vw] lg:top-0">
-              <ImageBox id="box-6-right-1" rotation="rotate-[-3deg]" size="tall-vertical" showWhiteBar={false} pageId="SixthPage" />
+              <ImageBox id="box-6-right-1" rotation="rotate-[-3deg]" size="tall-vertical"  pageId="SixthPage" />
             </div>
             {/* Box 2 - Top Right */}
             <div className="relative lg:absolute lg:top-[3vw] lg:right-[11vw]">
-              <ImageBox id="box-6-right-2" rotation="rotate-[-3deg]" size="vertical" showWhiteBar={false} pageId="SixthPage" />
+              <ImageBox id="box-6-right-2" rotation="rotate-[-3deg]" size="vertical"  pageId="SixthPage" />
             </div>
             {/* Box 3 - Bottom Right */}
             <div className="relative lg:absolute lg:top-[22vw] lg:right-[11vw]">
+              <ImageBox id="box-6-right-2" rotation="rotate-[-3deg]" size="vertical"  pageId="SixthPage" />
             </div>
           </div>
         </div>

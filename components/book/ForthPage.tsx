@@ -105,7 +105,7 @@ const ForthPage = () => {
   return (
     <>
       {/* Fourth page */}
-      <section className="relative min-h-screen bg-[#D23431] w-full overflow-hidden flex flex-col xl:flex-row">
+      <section className="relative min-h-screen bg-[#f60602] w-full overflow-hidden flex flex-col xl:flex-row">
 
         <div className="w-full lg:w-1/2 pt-8 sm:pt-12 lg:pt-16 px-6 sm:px-8 lg:pl-10">
           <h1 className={`${kalufira.className} text-5xl sm:text-7xl lg:text-[30vh] leading-tight sm:leading-tight lg:leading-[25vh]`}>
