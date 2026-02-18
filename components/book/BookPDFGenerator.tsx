@@ -1,18 +1,29 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import { Download, Loader2 } from "lucide-react";
+import React, { useState, useRef, useImperativeHandle, forwardRef } from "react";
+import { Download, Loader2, Send } from "lucide-react";
 import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import { toast } from "sonner";
 import { useBookData, BookDataProvider } from "./BookDataContext";
+import { useUploadThing } from "@/lib/uploadthing-client";
+
+export interface BookPDFGeneratorHandle {
+    ship: () => Promise<void>;
+    generate: () => Promise<void>;
+}
 
 interface BookPDFGeneratorProps {
     pages: React.ReactNode[];
+    isPurchased?: boolean;
+    hideButton?: boolean;
+    onStateChange?: (state: "idle" | "generating" | "shipping") => void;
 }
 
-export const BookPDFGenerator: React.FC<BookPDFGeneratorProps> = ({ pages }) => {
+export const BookPDFGenerator = forwardRef<BookPDFGeneratorHandle, BookPDFGeneratorProps>(({ pages, isPurchased = false, hideButton = false, onStateChange }, ref) => {
     const [isGenerating, setIsGenerating] = useState(false);
+    const [isShipping, setIsShipping] = useState(false);
+    const { startUpload } = useUploadThing("bookPdfUploader");
     const containerRef = useRef<HTMLDivElement>(null);
     const { data } = useBookData();
 
@@ -82,11 +93,84 @@ export const BookPDFGenerator: React.FC<BookPDFGeneratorProps> = ({ pages }) => 
         }
     };
 
-    const generatePDF = async () => {
+    const notifyStateChange = (state: "idle" | "generating" | "shipping") => {
+        if (onStateChange) onStateChange(state);
+    };
+
+    const handleShip = async () => {
+        setIsShipping(true);
+        notifyStateChange("shipping");
+        try {
+            const blob = await generatePDF(true);
+            if (!blob || !(blob instanceof Blob)) {
+                throw new Error("Failed to generate PDF");
+            }
+
+            const file = new File([blob], "book.pdf", { type: "application/pdf" });
+            toast.loading("Uploading book...", { id: "shipping-toast" });
+
+            const res = await startUpload([file]);
+            if (!res || !res[0]) throw new Error("Upload failed");
+
+            console.log("PDF uploaded successfully:", res[0].url);
+
+            // Save PDF URL to database for future auto-ship
+            try {
+                const saveResponse = await fetch("/api/save-pdf-url", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ fileUrl: res[0].url }),
+                });
+
+                const saveResult = await saveResponse.json();
+
+                if (!saveResponse.ok) {
+                    console.error("Failed to save PDF URL:", saveResult);
+                    toast.error("Warning: PDF saved but URL not stored in database", { id: "shipping-toast" });
+                } else {
+                    console.log("PDF URL saved to database:", saveResult);
+                }
+            } catch (saveError) {
+                console.error("Error saving PDF URL:", saveError);
+                // Continue with shipping even if save fails
+            }
+
+            toast.loading("Sending order to printer...", { id: "shipping-toast" });
+
+            const shipRes = await fetch("/api/ship-book", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ fileUrl: res[0].url }),
+            });
+
+            if (!shipRes.ok) {
+                const err = await shipRes.json();
+                throw new Error(err.error || "Shipping failed");
+            }
+
+            toast.success("Book sent to print successfully!", { id: "shipping-toast" });
+
+        } catch (error: any) {
+            console.error(error);
+            toast.error(error.message || "Failed to ship book", { id: "shipping-toast" });
+        } finally {
+            setIsShipping(false);
+            notifyStateChange("idle");
+        }
+    };
+
+    useImperativeHandle(ref, () => ({
+        ship: handleShip,
+        generate: async () => {
+            await generatePDF(false);
+        },
+    }));
+
+    const generatePDF = async (returnBlob = false) => {
         if (!containerRef.current) return;
 
         setIsGenerating(true);
-        const toastId = toast.loading("Measuring layout...");
+        notifyStateChange("generating"); const toastId = toast.loading("Measuring layout...");
 
         try {
             // 1. FIXED DESKTOP ASPECT RATIO (16:9)
@@ -272,6 +356,9 @@ export const BookPDFGenerator: React.FC<BookPDFGeneratorProps> = ({ pages }) => 
             }
 
             if (pdf) {
+                if (returnBlob) {
+                    return (pdf as jsPDF).output("blob");
+                }
                 (pdf as jsPDF).save("carnival-book-premium.pdf");
                 toast.success("PDF Downloaded!", { id: toastId });
             }
@@ -281,31 +368,94 @@ export const BookPDFGenerator: React.FC<BookPDFGeneratorProps> = ({ pages }) => 
             toast.error("Failed to generate PDF.", { id: toastId });
         } finally {
             setIsGenerating(false);
+            if (!returnBlob) notifyStateChange("idle");
         }
     };
 
     return (
         <>
-            <button
-                onClick={generatePDF}
-                disabled={isGenerating}
-                className={`
+            {!hideButton && (
+                <>
+                    <button
+                        onClick={() => generatePDF(false)}
+                        disabled={isGenerating}
+                        className={`
           flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3
           rounded-full bg-white/10 backdrop-blur-xl border border-white/20
           text-white font-semibold hover:bg-white/20
           transition-all duration-300 active:scale-95
           ${isGenerating ? "opacity-50 cursor-wait" : "hover:scale-105 hover:shadow-lg"}
         `}
-            >
-                {isGenerating ? (
-                    <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
-                ) : (
-                    <Download className="w-5 h-5 sm:w-6 sm:h-6" />
-                )}
-                <span className="hidden sm:inline text-sm sm:text-base">
-                    {isGenerating ? "Generating..." : "Download PDF"}
-                </span>
-            </button>
+                    >
+                        {isGenerating ? (
+                            <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
+                        ) : (
+                            <Download className="w-5 h-5 sm:w-6 sm:h-6" />
+                        )}
+                        <span className="hidden sm:inline text-sm sm:text-base">
+                            {isGenerating ? "Generating..." : "Download PDF"}
+                        </span>
+                    </button>
+
+                    {isPurchased && (
+                        <button
+                            onClick={async () => {
+                                setIsShipping(true);
+                                try {
+                                    const blob = await generatePDF(true);
+                                    if (!blob || !(blob instanceof Blob)) {
+                                        throw new Error("Failed to generate PDF");
+                                    }
+
+                                    const file = new File([blob], "book.pdf", { type: "application/pdf" });
+                                    toast.loading("Uploading book...", { id: "shipping-toast" });
+
+                                    const res = await startUpload([file]);
+                                    if (!res || !res[0]) throw new Error("Upload failed");
+
+                                    toast.loading("Sending order to printer...", { id: "shipping-toast" });
+
+                                    const shipRes = await fetch("/api/ship-book", {
+                                        method: "POST",
+                                        body: JSON.stringify({ fileUrl: res[0].url }),
+                                    });
+
+                                    if (!shipRes.ok) {
+                                        const err = await shipRes.json();
+                                        throw new Error(err.error || "Shipping failed");
+                                    }
+
+                                    toast.success("Book sent to print successfully!", { id: "shipping-toast" });
+
+                                } catch (error: any) {
+                                    console.error(error);
+                                    toast.error(error.message || "Failed to ship book", { id: "shipping-toast" });
+                                } finally {
+                                    setIsShipping(false);
+                                }
+                            }}
+                            disabled={isGenerating || isShipping}
+                            className={`
+                        flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3
+                        rounded-full bg-[#ff5500] backdrop-blur-xl border border-white/20
+                        text-white font-semibold hover:bg-[#ff4400]
+                        transition-all duration-300 active:scale-95 ml-4
+                        ${(isGenerating || isShipping) ? "opacity-50 cursor-wait" : "hover:scale-105 hover:shadow-lg"}
+                    `}
+                        >
+                            {isShipping ? (
+                                <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" />
+                            ) : (
+                                <Send className="w-5 h-5 sm:w-6 sm:h-6" />
+                            )}
+                            <span className="hidden sm:inline text-sm sm:text-base">
+                                {isShipping ? "Sending..." : "Send to Home"}
+                            </span>
+                        </button>
+                    )}
+                </>
+            )}
+
 
             {/*
                 OFF-SCREEN CONTAINER
@@ -640,4 +790,4 @@ export const BookPDFGenerator: React.FC<BookPDFGeneratorProps> = ({ pages }) => 
             </div>
         </>
     );
-};
+})

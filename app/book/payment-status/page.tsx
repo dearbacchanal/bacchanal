@@ -31,7 +31,35 @@ function PaymentStatusContent() {
       try {
         const res = await fetch(`/api/check-payment?session_id=${sessionId}`);
         const data = await res.json();
-        setStatus(data.success ? "success" : "failed");
+
+        if (data.success) {
+          setStatus("success");
+
+          // Save shipping details from session (webhook alternative for local dev)
+          if (data.session?.shipping_details) {
+            console.log("Saving shipping details from session:", data.session.shipping_details);
+
+            try {
+              const saveRes = await fetch("/api/save-shipping-details", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  shippingDetails: data.session.shipping_details
+                }),
+              });
+
+              if (saveRes.ok) {
+                console.log("Shipping details saved successfully");
+              } else {
+                console.error("Failed to save shipping details");
+              }
+            } catch (saveError) {
+              console.error("Error saving shipping details:", saveError);
+            }
+          }
+        } else {
+          setStatus("failed");
+        }
       } catch {
         setStatus("failed");
       }
@@ -43,7 +71,7 @@ function PaymentStatusContent() {
   useEffect(() => {
     if (status === "success" || status === "canceled") {
       const timer = setTimeout(() => {
-        window.location.href = "/book";
+        window.location.href = "/book?auto_ship=true";
       }, 3000);
       return () => clearTimeout(timer);
     }

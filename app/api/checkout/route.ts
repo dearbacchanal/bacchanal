@@ -26,6 +26,9 @@ export async function POST(req: NextRequest) {
                     quantity: 1,
                 },
             ],
+            shipping_address_collection: {
+                allowed_countries: ["US", "CA", "GB"], // Add more countries as needed
+            },
             success_url: `${process.env.NEXTAUTH_URL}/book/payment-status?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.NEXTAUTH_URL}/book/payment-status?canceled=true`,
             customer_email: user.email,

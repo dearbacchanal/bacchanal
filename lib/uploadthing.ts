@@ -29,6 +29,23 @@ export const ourFileRouter = {
       // Return data to be sent to the client
       return { uploadedBy: metadata.userId };
     }),
+
+  // PDF uploader for the entire book
+  bookPdfUploader: f({
+    pdf: {
+      maxFileSize: "32MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async ({ req }) => {
+      return {
+        userId: "user",
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Book PDF uploaded for user:", metadata.userId);
+      return { uploadedBy: metadata.userId, url: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

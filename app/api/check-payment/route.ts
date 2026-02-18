@@ -18,8 +18,10 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        // Retrieve the session from Stripe
-        const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+        // Retrieve the session from Stripe with shipping details expanded
+        const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId, {
+            expand: ['shipping_details']
+        }) as any; // Type assertion to access shipping_details
 
         if (checkoutSession.payment_status === "paid") {
             const userId = checkoutSession.metadata?.userId;
@@ -38,7 +40,15 @@ export async function GET(req: NextRequest) {
                     }
                 );
 
-                return NextResponse.json({ success: true });
+                console.log(`User ${userId} marked as purchased via check-payment`);
+
+                // Return session data including shipping details for client-side saving
+                return NextResponse.json({
+                    success: true,
+                    session: {
+                        shipping_details: checkoutSession.shipping_details
+                    }
+                });
             }
         }
 
