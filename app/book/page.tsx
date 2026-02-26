@@ -99,7 +99,11 @@ function BookPageContent() {
                 await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
                 return attemptShip(); // Retry
               }
-
+              // No PDF yet — user must generate book first, then use "Send to Home"
+              if (result.error?.includes("PDF not uploaded") || result.error?.includes("generate and upload")) {
+                toast.success("Payment confirmed! Flip through your book, then click \"Send to Home\" when you're ready to ship.", { id: "auto-ship-toast", duration: 6000 });
+                return false; // skip as success, no order placed yet
+              }
               throw new Error(result.error || "Auto-ship failed");
             }
 
@@ -110,8 +114,10 @@ function BookPageContent() {
         };
 
         try {
-          await attemptShip();
-          toast.success("Book order placed successfully!", { id: "auto-ship-toast" });
+          const didShip = await attemptShip();
+          if (didShip) {
+            toast.success("Book order placed successfully!", { id: "auto-ship-toast" });
+          }
         } catch (error: any) {
           console.error("Auto-ship error:", error);
           toast.error(

@@ -18,15 +18,16 @@ export const signUpSchema = z.object({
     .regex(/[0-9]/, "Password must contain at least one number"),
 });
 
-// Sign in validation schema
+// Sign in validation schema (password OR oneTimeToken for post-payment login)
 export const signInSchema = z.object({
   email: z
     .string()
     .email("Invalid email address")
     .toLowerCase(),
-  password: z
-    .string()
-    .min(1, "Password is required"),
+  password: z.string().optional(),
+  oneTimeToken: z.string().optional(),
+}).refine((data) => data.password !== undefined || data.oneTimeToken !== undefined, {
+  message: "Password or one-time token is required",
 });
 
 // Type exports

@@ -374,7 +374,7 @@ export const BookPDFGenerator = forwardRef<BookPDFGeneratorHandle, BookPDFGenera
 
     return (
         <>
-            {!hideButton && (
+            {!hideButton && isPurchased && (
                 <>
                     <button
                         onClick={() => generatePDF(false)}

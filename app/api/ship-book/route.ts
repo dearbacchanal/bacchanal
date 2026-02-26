@@ -55,15 +55,28 @@ export async function POST(req: NextRequest) {
         // We need a unique order ID. We can use the user ID + timestamp or a new UUID.
         // Let's use a simple timestamp-based ID for now, or maybe nanoid if available.
         const sourceOrderId = `${user.id}-${Date.now()}`;
+        const isDev = process.env.NODE_ENV === "development";
+        let sku = process.env.HP_BOOK_SKU;
+        if (!sku) {
+            if (isDev) {
+                sku = "DEV-PLACEHOLDER-SKU";
+                console.warn("[ship-book] HP_BOOK_SKU not set. Using placeholder for local testing. Add HP_BOOK_SKU to .env for real orders.");
+            } else {
+                return NextResponse.json(
+                    { error: "HP_BOOK_SKU not configured. Add HP_BOOK_SKU to .env with the book SKU from your printing publisher." },
+                    { status: 400 }
+                );
+            }
+        }
+        console.log("[ship-book] Using HP_BOOK_SKU:", sku);
 
         const hpClient = new HPSiteFlowClient();
 
-        // Construct the order payload
         const orderRes = await hpClient.createOrder({
             sourceOrderId: sourceOrderId,
             items: [{
                 sourceItemId: `item-${sourceOrderId}`,
-                sku: "YOUR_BOOK_SKU", // TODO: Replace with actual SKU
+                sku,
                 quantity: 1,
                 components: [{
                     code: "cover", // Example component code
@@ -88,15 +101,18 @@ export async function POST(req: NextRequest) {
             }
         });
 
-        // 3. Update DB with Order Status (Optional but good practice)
+        const ordersCollection = db.collection("orders");
+        await ordersCollection.insertOne({
+            sourceOrderId,
+            userId: user.id,
+            orderStatus: "submitted",
+            hpOrderId: orderRes._id,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
         await usersCollection.updateOne(
             { _id: new ObjectId(user.id) },
-            {
-                $set: {
-                    orderStatus: "submitted",
-                    hpOrderId: orderRes._id // Assuming HP returns an ID
-                }
-            }
+            { $set: { orderStatus: "submitted", hpOrderId: orderRes._id, updatedAt: new Date() } }
         );
 
         console.log("HP Site Flow Order Created:", orderRes);

@@ -60,30 +60,25 @@ const FirstPage = ({ pages, isPurchased, onShip, onDownload }: FirstPageProps) =
           </p>
         </div>
 
-        {/* Download Button at end of book */}
-        {pages && pages.length > 0 && (
+        {/* Download PDF and Ship buttons — only when user has paid */}
+        {pages && pages.length > 0 && isPurchased && (
           <div className="absolute bottom-32 left-1/2 -translate-x-1/2 z-20 flex gap-4">
-            {/* Manual Download Button if needed, or just the Ship button if isPurchased */}
-            {/* Note: In previous implementation BookPDFGenerator had both. 
-                 Now BookPage handles BookPDFGenerator. 
-                 We need to trigger it. 
-                 Let's provide buttons here that call callbacks. */}
-
             <button
               onClick={onDownload}
-              className={`
-                  flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3
-                  rounded-full bg-white/10 backdrop-blur-xl border border-white/20
-                  text-white font-semibold hover:bg-white/20
-                  transition-all duration-300 active:scale-95
-                  hover:scale-105 hover:shadow-lg
-                `}
+              className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-white/10 backdrop-blur-xl border border-white/20 text-white font-semibold hover:bg-white/20 transition-all duration-300 active:scale-95 hover:scale-105 hover:shadow-lg"
             >
               <Download className="w-5 h-5 sm:w-6 sm:h-6" />
-              <span className="hidden sm:inline text-sm sm:text-base">
-                Download PDF
-              </span>
+              <span className="hidden sm:inline text-sm sm:text-base">Download PDF</span>
             </button>
+            {onShip && (
+              <button
+                onClick={onShip}
+                className="flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full bg-[#ff5500] backdrop-blur-xl border border-white/20 text-white font-semibold hover:bg-[#ff4400] transition-all duration-300 active:scale-95 hover:scale-105 hover:shadow-lg"
+              >
+                <Send className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="hidden sm:inline text-sm sm:text-base">Send to Home</span>
+              </button>
+            )}
           </div>
         )}
       </section>

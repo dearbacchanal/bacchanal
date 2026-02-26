@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function PaymentStatusPage() {
   return (
@@ -35,24 +36,28 @@ function PaymentStatusContent() {
         if (data.success) {
           setStatus("success");
 
-          // Save shipping details from session (webhook alternative for local dev)
-          if (data.session?.shipping_details) {
-            console.log("Saving shipping details from session:", data.session.shipping_details);
-
+          if (data.oneTimeToken && data.email) {
             try {
-              const saveRes = await fetch("/api/save-shipping-details", {
+              const result = await signIn("credentials", {
+                email: data.email,
+                oneTimeToken: data.oneTimeToken,
+                redirect: false,
+              });
+              if (result?.error) {
+                console.error("Post-payment sign-in failed:", result.error);
+              }
+            } catch (e) {
+              console.error("Post-payment sign-in error:", e);
+            }
+          }
+
+          if (data.session?.shipping_details) {
+            try {
+              await fetch("/api/save-shipping-details", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  shippingDetails: data.session.shipping_details
-                }),
+                body: JSON.stringify({ shippingDetails: data.session.shipping_details }),
               });
-
-              if (saveRes.ok) {
-                console.log("Shipping details saved successfully");
-              } else {
-                console.error("Failed to save shipping details");
-              }
             } catch (saveError) {
               console.error("Error saving shipping details:", saveError);
             }

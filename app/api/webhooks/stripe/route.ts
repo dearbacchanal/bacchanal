@@ -24,39 +24,59 @@ export async function POST(req: NextRequest) {
         const session = event.data.object as any;
         const userId = session.metadata?.userId;
         const shippingDetails = session.shipping_details;
+        const email = session.customer_email || session.customer_details?.email;
 
-        console.log("Webhook: checkout.session.completed received");
-        console.log("User ID:", userId);
-        console.log("Shipping details:", shippingDetails);
+        try {
+            const db = await getDatabase();
+            const usersCollection = db.collection("users");
 
-        if (userId) {
-            try {
-                const db = await getDatabase();
-                const usersCollection = db.collection("users");
-
-                const result = await usersCollection.updateOne(
+            if (userId) {
+                await usersCollection.updateOne(
                     { _id: new ObjectId(userId) },
                     {
                         $set: {
                             isPurchased: true,
-                            shippingDetails: shippingDetails,
+                            shippingDetails: shippingDetails ?? undefined,
                             updatedAt: new Date(),
                         },
                     }
                 );
-
-                console.log(`User ${userId} purchase status updated - matched: ${result.matchedCount}, modified: ${result.modifiedCount}`);
-
-                if (result.matchedCount === 0) {
-                    console.error(`WARNING: No user found with ID ${userId}`);
+                console.log(`User ${userId} purchase updated via webhook`);
+            } else if (email) {
+                const existing = await usersCollection.findOne({ email });
+                if (existing) {
+                    await usersCollection.updateOne(
+                        { _id: existing._id },
+                        {
+                            $set: {
+                                isPurchased: true,
+                                shippingDetails: shippingDetails ?? undefined,
+                                updatedAt: new Date(),
+                            },
+                        }
+                    );
+                } else {
+                    await usersCollection.insertOne({
+                        email,
+                        name: session.customer_details?.name ?? email.split("@")[0],
+                        provider: "stripe",
+                        password: null,
+                        image: null,
+                        emailVerified: new Date(),
+                        isPurchased: true,
+                        shippingDetails: shippingDetails ?? undefined,
+                        createdAt: new Date(),
+                        updatedAt: new Date(),
+                    });
                 }
-            } catch (error) {
-                console.error("Error updating user purchase status:", error);
-                return NextResponse.json(
-                    { error: "Internal server error" },
-                    { status: 500 }
-                );
+                console.log(`Guest user ${email} created/updated via webhook`);
             }
+        } catch (error) {
+            console.error("Error updating user purchase status:", error);
+            return NextResponse.json(
+                { error: "Internal server error" },
+                { status: 500 }
+            );
         }
     }
 

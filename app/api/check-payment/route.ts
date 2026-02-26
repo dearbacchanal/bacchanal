@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { getDatabase } from "@/lib/db";
 import { ObjectId } from "mongodb";
-import { auth } from "@/lib/auth";
+import { randomBytes } from "crypto";
 
 export async function GET(req: NextRequest) {
     try {
@@ -13,47 +13,80 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "Missing session_id" }, { status: 400 });
         }
 
-        const session = await auth();
-        if (!session?.user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        // const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+        const checkoutSession = await stripe.checkout.sessions.retrieve(
+  sessionId,
+  { expand: ["shipping_details"] }
+) as any;
+
+        if (checkoutSession.payment_status !== "paid") {
+            return NextResponse.json({
+                success: false,
+                status: checkoutSession.status,
+                payment_status: checkoutSession.payment_status
+            });
         }
 
-        // Retrieve the session from Stripe (shipping_details is a top-level field, not expandable)
-        const checkoutSession = await stripe.checkout.sessions.retrieve(sessionId);
+        const db = await getDatabase();
+        const usersCollection = db.collection("users");
+        const userId = checkoutSession.metadata?.userId as string | undefined;
+        const email = (checkoutSession.customer_email || (checkoutSession.customer_details as any)?.email) as string | undefined;
 
-        if (checkoutSession.payment_status === "paid") {
-            const userId = checkoutSession.metadata?.userId;
+        if (userId) {
+            await usersCollection.updateOne(
+                { _id: new ObjectId(userId) },
+                { $set: { isPurchased: true, updatedAt: new Date() } }
+            );
+            return NextResponse.json({
+                success: true,
+                session: { shipping_details: checkoutSession.shipping_details }
+            });
+        }
 
-            if (userId) {
-                const db = await getDatabase();
-                const usersCollection = db.collection("users");
+        if (!email) {
+            return NextResponse.json({ success: false, error: "No customer email" }, { status: 400 });
+        }
 
-                await usersCollection.updateOne(
-                    { _id: new ObjectId(userId) },
-                    {
-                        $set: {
-                            isPurchased: true,
-                            updatedAt: new Date(),
-                        },
-                    }
-                );
+        let user = await usersCollection.findOne({ email });
+        const oneTimeToken = randomBytes(32).toString("hex");
+        const oneTimeTokenExpiry = new Date(Date.now() + 5 * 60 * 1000);
 
-                console.log(`User ${userId} marked as purchased via check-payment`);
-
-                // Return session data including shipping details for client-side saving
-                return NextResponse.json({
-                    success: true,
-                    session: {
-                        shipping_details: checkoutSession.shipping_details
-                    }
-                });
-            }
+        if (user) {
+            await usersCollection.updateOne(
+                { _id: user._id },
+                {
+                    $set: {
+                        isPurchased: true,
+                        shippingDetails: checkoutSession.shipping_details ?? undefined,
+                        oneTimeToken,
+                        oneTimeTokenExpiry,
+                        updatedAt: new Date(),
+                    },
+                }
+            );
+        } else {
+            const insert = await usersCollection.insertOne({
+                email,
+                name: checkoutSession.customer_details?.name ?? email.split("@")[0],
+                provider: "stripe",
+                password: null,
+                image: null,
+                emailVerified: new Date(),
+                isPurchased: true,
+                shippingDetails: checkoutSession.shipping_details ?? undefined,
+                oneTimeToken,
+                oneTimeTokenExpiry,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+            });
+            user = await usersCollection.findOne({ _id: insert.insertedId });
         }
 
         return NextResponse.json({
-            success: false,
-            status: checkoutSession.status,
-            payment_status: checkoutSession.payment_status
+            success: true,
+            session: { shipping_details: checkoutSession.shipping_details },
+            email,
+            oneTimeToken,
         });
     } catch (error: any) {
         console.error("Payment Check Error:", error);

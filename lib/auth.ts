@@ -16,36 +16,47 @@ export const authConfig: NextAuthConfig = {
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
+        oneTimeToken: { label: "One-time token", type: "text" },
       },
       async authorize(credentials) {
         try {
-          // Validate credentials
-          const { email, password } = signInSchema.parse(credentials);
+          const parsed = signInSchema.safeParse(credentials);
+          if (!parsed.success) return null;
+          const { email, password, oneTimeToken } = parsed.data;
 
-          // Get database
           const db = await getDatabase();
           const usersCollection = db.collection("users");
-
-          // Find user by email
           const user = await usersCollection.findOne({ email });
 
-          if (!user) {
-            return null;
+          if (!user) return null;
+
+          // Post-payment one-time token login (no password)
+          if (oneTimeToken) {
+            if (
+              user.oneTimeToken !== oneTimeToken ||
+              !user.oneTimeTokenExpiry ||
+              new Date() > new Date(user.oneTimeTokenExpiry)
+            ) {
+              return null;
+            }
+            await usersCollection.updateOne(
+              { _id: user._id },
+              { $unset: { oneTimeToken: "", oneTimeTokenExpiry: "" }, $set: { updatedAt: new Date() } }
+            );
+            return {
+              id: user._id.toString(),
+              email: user.email,
+              name: user.name,
+              image: user.image || null,
+              provider: (user.provider as "credentials" | "google") || "credentials",
+            };
           }
 
-          // Check if user has a password (credentials user)
-          if (!user.password) {
-            throw new Error("Please sign in with Google");
-          }
+          // Normal password login
+          if (!user.password) throw new Error("Please sign in with Google");
+          const isPasswordValid = await compare(password!, user.password);
+          if (!isPasswordValid) return null;
 
-          // Verify password
-          const isPasswordValid = await compare(password, user.password);
-
-          if (!isPasswordValid) {
-            return null;
-          }
-
-          // Return user object
           return {
             id: user._id.toString(),
             email: user.email,

@@ -71,18 +71,17 @@ export function SaveBookModal({ isOpen, onClose, onOpen, onSaveSuccess }: SaveBo
   }, [isAuthenticated, isLoading, waitingForAuth, onOpen]);
 
   const handleSave = async () => {
-    // Check if user is logged in
-    if (!isAuthenticated) {
-      setWaitingForAuth(true);
-      onClose(); // Close the save modal
-      openModal("signup"); // Open auth modal
+    // Require payment first (no login/signup gate — show Stripe directly)
+    if (!isPurchased) {
+      onClose();
+      setShowPayment(true);
       return;
     }
 
-    // Check if user has purchased
-    if (!isPurchased) {
-      onClose(); // Close the save modal first
-      setShowPayment(true);
+    if (!isAuthenticated) {
+      setWaitingForAuth(true);
+      onClose();
+      openModal("signup");
       return;
     }
 
